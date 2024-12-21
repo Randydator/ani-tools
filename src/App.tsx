@@ -1,10 +1,12 @@
-import First from './components/first.tsx'
+import Home from "./components/Home/Home";
+import Header from "./components/Header/Header";
+
 
 function App() {
     return (
         <>
-            <h1>Test if this automatically deploys</h1>
-            <First />
+            <Header />
+            <Home />
         </>
     )
 }
