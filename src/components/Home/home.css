@@ -1,0 +1,22 @@
+.homeBody {
+    display: grid;
+    place-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.card {
+    background-color: var(--clr-surface-a10);
+    color: white;
+    text-align: center;
+    width: 32rem;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.2);
+
+    
+.card-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--clr-primary-a50);
+}
+
+}

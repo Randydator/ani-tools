@@ -1,0 +1,31 @@
+:root {
+    /** Dark theme primary colors */
+    --clr-primary-a0: #f79df9;
+    --clr-primary-a10: #f9a8fa;
+    --clr-primary-a20: #fab4fb;
+    --clr-primary-a30: #fbbffb;
+    --clr-primary-a40: #fdcafc;
+    --clr-primary-a50: #fdd4fd;
+
+    /** Dark theme surface colors */
+    --clr-surface-a0: #070718;
+    --clr-surface-a10: #21212d;
+    --clr-surface-a20: #383843;
+    --clr-surface-a30: #51515b;
+    --clr-surface-a40: #6c6c74;
+    --clr-surface-a50: #87878e;
+
+    /** Dark theme tonal surface colors */
+    --clr-surface-tonal-a0: #1e182a;
+    --clr-surface-tonal-a10: #332d3e;
+    --clr-surface-tonal-a20: #494454;
+    --clr-surface-tonal-a30: #615c6a;
+    --clr-surface-tonal-a40: #797581;
+    --clr-surface-tonal-a50: #938f99;
+
+    /** Examples */
+    .bg-primary {
+        color: var(--clr-primary-a50);
+        background-color: var(--clr-surface-a0);
+    }
+}
