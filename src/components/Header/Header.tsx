@@ -1,7 +1,8 @@
 import './header.css';
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaRegTrashAlt } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router-dom';
+import { login, clearCookies } from './authenticate';
 
 function Header() {
 
@@ -9,6 +10,10 @@ function Header() {
         <Container className='header'>
             <Row className="justify-content-md-center">
                 <Col xs lg="2">
+                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={clearCookies}>
+                        <FaRegTrashAlt className="me-1" />
+                        Clear all cookies
+                    </Button>
 
                 </Col>
                 <Col span={8}>
@@ -17,7 +22,7 @@ function Header() {
                     </Link>
                 </Col>
                 <Col xs lg="2">
-                    <Button variant="link" className="p-0 border-0 text-decoration-none login">
+                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login}>
                         <FaUser className="me-1" />
                         Login
                     </Button>

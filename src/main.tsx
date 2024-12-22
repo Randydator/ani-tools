@@ -12,6 +12,7 @@ import Home from "./components/Home/Home";
 import AniLike from "./components/AniLike/AniLike";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import ActivitySearch from './components/ActivitySearch/ActivitySearch'
+import OauthCallback from './components/oauthCallback/OauthCallback'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path="AniLike" element={<AniLike />} />
       <Route path="*" element={<NotFoundPage />} />
       <Route path="ActivitySearch" element={<ActivitySearch />} />
+      <Route path="oauthCallback" element={<OauthCallback />} />
     </Route>
   )
 )
