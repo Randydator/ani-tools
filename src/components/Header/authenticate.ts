@@ -9,16 +9,11 @@
     If I need more, I could use my set up cloudflare d1 and implment some sort of session management system
     with encryption that can also shorten the tokens. 
 */
-import Cookies from 'js-cookie';
 
 export function login() {
     console.log("Started login")
     const client_id: number = 22594;
     const loginUrl: string = `https://anilist.co/api/v2/oauth/authorize?client_id=${client_id}&response_type=token`;
 
-    window.location.href = loginUrl;
-}
-
-export function clearCookies() {
-    Cookies.remove('access_token'); 
+    window.location.href = loginUrl; // Redirect to the AniList login page
 }

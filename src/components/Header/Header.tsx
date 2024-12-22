@@ -1,10 +1,31 @@
 import './header.css';
+import { useState, useEffect } from 'react';
 import { Container, Button, Row, Col } from 'react-bootstrap';
 import { FaUser, FaRegTrashAlt } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router-dom';
-import { login, clearCookies } from './authenticate';
+import { login } from './authenticate';
+import Cookies from 'js-cookie';
+
 
 function Header() {
+    const [loginAvailable, setLoginAvailable] = useState(false);
+
+    function clearCookies() {
+        console.log(Cookies.get());
+        Object.keys(Cookies.get()).forEach(cookieName => {
+            console.log(`Deleting cookie`);
+            Cookies.remove(cookieName); // Remove cookie
+        });
+    }
+
+    useEffect(() => {
+        const token = Cookies.get('access_token');
+        if (token) {
+          setLoginAvailable(true);
+        } else {
+          setLoginAvailable(false);
+        }
+      }, [Cookies.get('access_token')]);
 
     return <>
         <Container className='header'>
@@ -22,7 +43,7 @@ function Header() {
                     </Link>
                 </Col>
                 <Col xs lg="2">
-                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login}>
+                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={loginAvailable}>
                         <FaUser className="me-1" />
                         Login
                     </Button>
