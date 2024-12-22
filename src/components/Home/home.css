@@ -10,7 +10,12 @@
     color: white;
     text-align: center;
     width: 32rem;
-    box-shadow: 0 2px rgba(0, 0, 0, 0.2);
+    
+    @media screen and (max-width: 600px) {
+        width: 18rem;
+    }
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+
 
     
 .card-title {
