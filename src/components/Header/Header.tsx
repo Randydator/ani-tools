@@ -9,23 +9,18 @@ import Cookies from 'js-cookie';
 
 function Header() {
     const [token, setToken] = useState(Cookies.get('access_token'));
-    const [loginAvailable, setLoginAvailable] = useState(false);
 
+    // Setting a cookie is asynchronous, so after the redirect, the cookie isn't set yet. 
+    // useEffect here runs once after the component is mounted. By that time the cookie is set.
     useEffect(() => {
         const token = Cookies.get('access_token');
         setToken(token);
+    }, []);
 
-        if (token) {
-          setLoginAvailable(true);
-        } else {
-          setLoginAvailable(false);
-        }
-      }, [token]);
-
-      function clearCookies() {
+    function clearCookies() {
         Object.keys(Cookies.get()).forEach(cookieName => {
             Cookies.remove(cookieName);
-            setToken('');
+            setToken(undefined);
         });
     }
 
@@ -45,7 +40,7 @@ function Header() {
                     </Link>
                 </Col>
                 <Col xs lg="2">
-                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={loginAvailable}>
+                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={token !== undefined}>
                         <FaUser className="me-1" />
                         Login
                     </Button>
