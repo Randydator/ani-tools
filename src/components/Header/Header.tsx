@@ -8,24 +8,26 @@ import Cookies from 'js-cookie';
 
 
 function Header() {
+    const [token, setToken] = useState(Cookies.get('access_token'));
     const [loginAvailable, setLoginAvailable] = useState(false);
-
-    function clearCookies() {
-        console.log(Cookies.get());
-        Object.keys(Cookies.get()).forEach(cookieName => {
-            console.log(`Deleting cookie`);
-            Cookies.remove(cookieName); // Remove cookie
-        });
-    }
 
     useEffect(() => {
         const token = Cookies.get('access_token');
+        setToken(token);
+
         if (token) {
           setLoginAvailable(true);
         } else {
           setLoginAvailable(false);
         }
-      }, [Cookies.get('access_token')]);
+      }, [token]);
+
+      function clearCookies() {
+        Object.keys(Cookies.get()).forEach(cookieName => {
+            Cookies.remove(cookieName);
+            setToken('');
+        });
+    }
 
     return <>
         <Container className='header'>
