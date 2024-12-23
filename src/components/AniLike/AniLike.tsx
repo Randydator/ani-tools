@@ -6,7 +6,6 @@ function AniLike() {
   const {
     status,
     error,
-    data: unreadCount,
   } = useQuery({
     queryKey: ['unreadCount'],
     queryFn: fetchUnreadNotificationCount,

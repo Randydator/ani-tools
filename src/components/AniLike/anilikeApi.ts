@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { unreadCountQuery, testQuery } from './anilikeQueries';
+import { unreadCountQuery } from './anilikeQueries';
 
 export function fetchUnreadNotificationCount() {
     const variables = {
