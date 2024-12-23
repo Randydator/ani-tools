@@ -1,8 +1,29 @@
-
+import { useQuery } from "react-query"
+import { fetchUnreadNotificationCount } from "./anilikeApi"
 
 function AniLike() {
+
+  const {
+    status,
+    error,
+    data: unreadCount,
+  } = useQuery({
+    queryKey: ['unreadCount'],
+    queryFn: fetchUnreadNotificationCount,
+  })
+
+  if (status === 'loading') {
+    return <div>Loading...</div>
+  }
+
+  if (status === 'error') {
+    return <div>Error: {JSON.stringify(error)}</div>
+  }
+
   return (
-    <div>AniLike</div>
+    <h1>AniLike</h1>
+
+
   )
 }
 

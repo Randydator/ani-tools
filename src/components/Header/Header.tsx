@@ -1,14 +1,42 @@
 import './header.css';
+import { useState, useEffect } from 'react';
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaRegTrashAlt } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router-dom';
+import { login } from './authenticate';
+import Cookies from 'js-cookie';
+
 
 function Header() {
+    const [token, setToken] = useState(Cookies.get('access_token'));
+    const [loginAvailable, setLoginAvailable] = useState(false);
+
+    useEffect(() => {
+        const token = Cookies.get('access_token');
+        setToken(token);
+
+        if (token) {
+          setLoginAvailable(true);
+        } else {
+          setLoginAvailable(false);
+        }
+      }, [token]);
+
+      function clearCookies() {
+        Object.keys(Cookies.get()).forEach(cookieName => {
+            Cookies.remove(cookieName);
+            setToken('');
+        });
+    }
 
     return <>
         <Container className='header'>
             <Row className="justify-content-md-center">
                 <Col xs lg="2">
+                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={clearCookies}>
+                        <FaRegTrashAlt className="me-1" />
+                        Clear all cookies
+                    </Button>
 
                 </Col>
                 <Col span={8}>
@@ -17,7 +45,7 @@ function Header() {
                     </Link>
                 </Col>
                 <Col xs lg="2">
-                    <Button variant="link" className="p-0 border-0 text-decoration-none login">
+                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={loginAvailable}>
                         <FaUser className="me-1" />
                         Login
                     </Button>
