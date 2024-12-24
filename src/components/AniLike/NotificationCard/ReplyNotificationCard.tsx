@@ -40,7 +40,7 @@ function ReplyNotificationCard({ notifications }: ReplyNotificationCardProps) {
                     className="notificationCard"
                     onClick={() => {
                         window.open(activity.siteUrl, '_blank', 'noopener,noreferrer')
-                        setNotifications(notificationList.filter((n, i) => i !== index))
+                        setNotifications(notificationList.filter((_, i) => i !== index))
                     }}
                 >
                     <div className="cardBodyDiv">

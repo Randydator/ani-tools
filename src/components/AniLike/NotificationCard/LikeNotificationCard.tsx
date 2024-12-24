@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 import { Card } from 'react-bootstrap';
-import { LikeNotificationCardProps, ReplyNotificationCardProps, LikeNotification, ReplyNotification } from '../anilikeInterfaces';
+import { LikeNotificationCardProps, ReplyNotificationCardProps, LikeNotification } from '../anilikeInterfaces';
 import { useState } from 'react';
 
 import './notificationCard.css';
@@ -35,7 +35,7 @@ function LikeNotificationCard({ notifications }: ReplyNotificationCardProps | Li
                     className="notificationCard"
                     onClick={() => {
                         window.open(user.siteUrl, '_blank', 'noopener,noreferrer')
-                        setNotifications(notificationList.filter((n, i) => i !== index))
+                        setNotifications(notificationList.filter((_, i) => i !== index))
                     }}
                 >
                     <div className="cardBodyDiv">
