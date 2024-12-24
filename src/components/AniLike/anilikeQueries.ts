@@ -16,3 +16,147 @@ query {
   }
 }
 `
+
+export const likeActivityQuery = `
+query ($page: Int, $perPage: Int)
+{
+    Page(page: $page, perPage: $perPage)
+    {
+        notifications(type: ACTIVITY_LIKE)
+        {
+            ...on ActivityLikeNotification
+            {
+                user
+                {	
+                    name, siteUrl, avatar{large}					
+                }
+            }
+        }
+    }
+}
+`;
+
+export const queryReplyActivity = `
+query ($page: Int, $pageNumber: Int)
+{
+	Page(page: $page, perPage: $pageNumber) {
+		notifications(type: ACTIVITY_REPLY) {
+			... on ActivityReplyNotification {
+                createdAt,
+				user {
+					name
+					siteUrl
+					avatar {
+						large
+					}
+				}, activity{ ...on TextActivity{siteUrl}, ...on ListActivity{siteUrl}, ...on MessageActivity{siteUrl}}
+			}
+		}
+	}
+}
+
+`
+
+export const querySubscribedActivity = `
+query ($page: Int, $pageNumber: Int)
+{
+	Page(page: $page, perPage: $pageNumber) {
+		notifications(type: ACTIVITY_REPLY_SUBSCRIBED) {
+			... on ActivityReplySubscribedNotification {
+                createdAt,
+				user {
+					name
+					siteUrl
+					avatar {
+						large
+					}
+				}
+				activity {
+					... on TextActivity {
+						siteUrl
+					}
+					... on ListActivity {
+						siteUrl
+					}
+					... on MessageActivity {
+						siteUrl
+					}
+				}
+			}
+		}
+	}
+}
+
+`
+
+export const queryMentionActivity = `
+query ($page: Int, $pageNumber: Int)
+{
+	Page(page: $page, perPage: $pageNumber) {
+		notifications(type: ACTIVITY_MENTION) {
+			... on ActivityMentionNotification {
+				createdAt,
+				user {
+					name
+					siteUrl
+					avatar {
+						large
+					}
+				}
+				activity {
+					... on TextActivity {
+						siteUrl
+					}
+					... on MessageActivity {
+						siteUrl
+					}
+					... on ListActivity {
+						siteUrl
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+export const querySearchMedia = `
+query ($page: String)
+{
+  Media(search: $page, type:ANIME) {
+    id
+    title{
+        english
+        romaji
+    }
+  }
+
+}
+`
+
+export const querySearchAnimeActivity = `
+query ($page: Int, $pageNumber: Int)
+{
+    Page(perPage: 50) {
+      activities(userId: $page, mediaId: $pageNumber) {
+        ... on ListActivity {
+          id
+          siteUrl
+          createdAt
+          status
+          progress
+        }
+      }
+    }
+  }
+  
+`
+
+export const querySearchUsername = `
+query ($page: String)
+{
+  User(search: $page){
+    id
+  }
+}
+`

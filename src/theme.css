@@ -28,4 +28,9 @@
         color: var(--clr-primary-a50);
         background-color: var(--clr-surface-a0);
     }
+
+    h1{
+        color: var(--clr-primary-a50);
+        text-align: center;
+    }
 }
