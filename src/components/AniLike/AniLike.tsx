@@ -1,32 +1,20 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchLikeActivities } from "./anilikeApi"
-import NotificationCard from "./NotificationCard";
+import { fetchLikeActivities, fetchReplyActivities } from "./anilikeApi"
+import LikeNotificationCard from "./NotificationCard/LikeNotificationCard";
+import ReplyNotificationCard from "./NotificationCard/ReplyNotificationCard";
 import { Col, Row } from "react-bootstrap";
-
-export interface Notification {
-  user: {
-      name: string;
-      siteUrl: string;
-      avatar: {
-          large: string;
-      };
-  };
-}
-
-export interface NotificationCardProps {
-  notifications: Notification[];
-}
-
 
 function AniLike() {
 
   const { isLoading, error, data, } = useQuery({
     queryKey: ['likeNotifications'],
     queryFn: async () => {
-      const a = await fetchLikeActivities(100)
-      return a
+      const likeNotifications = await fetchLikeActivities(100)
+      const replyNotifications = await fetchReplyActivities(15)
+      return { likeNotifications, replyNotifications }
     },
     refetchOnWindowFocus: false,
+    staleTime: 50000 
   });
 
   if (isLoading || data === undefined) {
@@ -38,16 +26,18 @@ function AniLike() {
   }
 
   return (
-    <Row className="justify-content-md-center">
-      <Col md={4}>
-        <h1>Like Notifications</h1>
-        <NotificationCard notifications={data} />
-      </Col>
-      <Col md={4}>
-        <h1>Reply Notifications</h1>
-        <NotificationCard notifications={data} />
-      </Col>
-    </Row>
+    <>
+      <Row className="justify-content-md-center">
+        <Col md={4}>
+          <h1>Like Notifications</h1>
+          <LikeNotificationCard notifications={data.likeNotifications} />
+        </Col>
+        <Col md={4}>
+          <h1>Reply Notifications</h1>
+          <ReplyNotificationCard notifications={data.replyNotifications} />
+        </Col>
+      </Row>
+    </>
   )
 }
 

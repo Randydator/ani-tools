@@ -1,6 +1,8 @@
 import { fetchFromAnilist } from '../../utils/anilistRequestUtil';
-import { unreadCountQuery, likeActivityQuery } from './anilikeQueries';
-import { Notification } from './AniLike';
+import { unreadCountQuery, likeActivityQuery, subscribedActivityQuery, replyActivityQuery, mentionActivityQuery } from './anilikeQueries';
+import { LikeNotification, ReplyNotification } from './anilikeInterfaces';
+
+const pageSize = 50 // Anilist maximum page size
 
 export async function fetchUnreadNotificationCount() {
     const rawUnreadCount = await fetchFromAnilist(unreadCountQuery, {});
@@ -8,7 +10,6 @@ export async function fetchUnreadNotificationCount() {
 }
 
 export async function fetchLikeActivities(notificationCount: number) {
-    const pageSize = 50
     const pageCount = Math.ceil(notificationCount / 50)
     const requestArray = []
 
@@ -19,6 +20,19 @@ export async function fetchLikeActivities(notificationCount: number) {
         requestArray.push(fetchFromAnilist(likeActivityQuery, { page: pageIndex + 1, perPage: currentPageSize }))
     }
     const result = await Promise.all(requestArray)
-    const typifiedResult: Notification[] = result.flatMap((response) => response.Page.notifications);
-      return typifiedResult;
+    const resultArray: LikeNotification[] = result.flatMap((response) => response.Page.notifications);
+      return resultArray;
+}
+
+export async function fetchReplyActivities(notificationOfEachTypeCount: number) {
+    const replyActivityTypes = [replyActivityQuery, subscribedActivityQuery, mentionActivityQuery]
+    const requestArray = []
+
+    for (const type of replyActivityTypes) {
+        requestArray.push(fetchFromAnilist(type, { page: 1, perPage: notificationOfEachTypeCount }))
+    }
+
+    const result = await Promise.all(requestArray)
+    const resultArray: ReplyNotification[] = result.flatMap((response) => response.Page.notifications);
+    return resultArray;
 }

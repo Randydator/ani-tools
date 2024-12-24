@@ -17,6 +17,9 @@ function Header() {
         setToken(token);
     }, []);
 
+    // Figure out Context so multiple parts of the app can check if access token is there. 
+    // also needed in home bcs aniLike dies without access token 
+
     function clearCookies() {
         Object.keys(Cookies.get()).forEach(cookieName => {
             Cookies.remove(cookieName);

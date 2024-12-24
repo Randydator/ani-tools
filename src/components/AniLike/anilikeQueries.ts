@@ -36,10 +36,10 @@ query ($page: Int, $perPage: Int)
 }
 `;
 
-export const queryReplyActivity = `
-query ($page: Int, $pageNumber: Int)
+export const replyActivityQuery = `
+query ($page: Int, $perPage: Int)
 {
-	Page(page: $page, perPage: $pageNumber) {
+	Page(page: $page, perPage: $perPage) {
 		notifications(type: ACTIVITY_REPLY) {
 			... on ActivityReplyNotification {
                 createdAt,
@@ -57,10 +57,10 @@ query ($page: Int, $pageNumber: Int)
 
 `
 
-export const querySubscribedActivity = `
-query ($page: Int, $pageNumber: Int)
+export const subscribedActivityQuery = `
+query ($page: Int, $perPage: Int)
 {
-	Page(page: $page, perPage: $pageNumber) {
+	Page(page: $page, perPage: $perPage) {
 		notifications(type: ACTIVITY_REPLY_SUBSCRIBED) {
 			... on ActivityReplySubscribedNotification {
                 createdAt,
@@ -89,10 +89,10 @@ query ($page: Int, $pageNumber: Int)
 
 `
 
-export const queryMentionActivity = `
-query ($page: Int, $pageNumber: Int)
+export const mentionActivityQuery = `
+query ($page: Int, $perPage: Int)
 {
-	Page(page: $page, perPage: $pageNumber) {
+	Page(page: $page, perPage: $perPage) {
 		notifications(type: ACTIVITY_MENTION) {
 			... on ActivityMentionNotification {
 				createdAt,
