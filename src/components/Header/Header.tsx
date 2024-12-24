@@ -5,6 +5,7 @@ import { FaUser, FaRegTrashAlt } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router-dom';
 import { login } from './authenticate';
 import Cookies from 'js-cookie';
+import { TokenContext } from './TokenContext';
 
 
 function Header() {
@@ -52,7 +53,9 @@ function Header() {
         </Container>
 
         <main>
-            <Outlet />
+            <TokenContext.Provider value={token} >
+                <Outlet />
+            </ TokenContext.Provider>
         </main>
     </>
 

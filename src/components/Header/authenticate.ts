@@ -11,7 +11,6 @@
 */
 
 export function login() {
-    console.log("Started login")
     const client_id: number = 22594;
     const loginUrl: string = `https://anilist.co/api/v2/oauth/authorize?client_id=${client_id}&response_type=token`;
 

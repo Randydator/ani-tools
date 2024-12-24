@@ -14,15 +14,16 @@ function AniLike() {
       return { likeNotifications, replyNotifications }
     },
     refetchOnWindowFocus: false,
-    staleTime: 50000 
+    staleTime: 50000, 
+    retry: false
   });
+
+  if (error) {
+    return <div style={{ color: 'white' }}>Error: {JSON.stringify(error)}</div>
+  }
 
   if (isLoading || data === undefined) {
     return <h1>Loading...</h1>
-  }
-
-  if (error) {
-    return <div>Error: {JSON.stringify(error)}</div>
   }
 
   return (
@@ -33,7 +34,7 @@ function AniLike() {
           <LikeNotificationCard notifications={data.likeNotifications} />
         </Col>
         <Col md={4}>
-          <h1>Reply Notifications</h1>
+          <h1>Reply Notifications{data.replyNotifications.length !== 45 ? ' (weird)' : ''}</h1>
           <ReplyNotificationCard notifications={data.replyNotifications} />
         </Col>
       </Row>

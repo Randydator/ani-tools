@@ -19,7 +19,6 @@ export async function fetchFromAnilist(query: string, variables: object) {
             }
         )
         .then(response => {
-            console.log(response.data)
             return response.data.data;
         });
 }
