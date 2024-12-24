@@ -2,7 +2,7 @@
 
 function ActivitySearch() {
   return (
-    <div>ActivitySearch</div>
+    <h1>ActivitySearch</h1>
   )
 }
 

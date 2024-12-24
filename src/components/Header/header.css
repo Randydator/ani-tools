@@ -1,9 +1,9 @@
 .header {
     padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .text {
-    text-align: center;
     color: var(--clr-primary-a0);
 
 }

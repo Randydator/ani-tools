@@ -26,7 +26,7 @@ function OauthCallback() {
         } else {
             console.error('Access token not found in URL fragment');
         }
-    }, [navigate]);
+    }, []);
 
     return <p>Redirecting...</p>;
 }
