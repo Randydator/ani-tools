@@ -1,28 +1,26 @@
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import { fetchUnreadNotificationCount } from "./anilikeApi"
 
 function AniLike() {
 
-  const {
-    status,
-    error,
-  } = useQuery({
-    queryKey: ['unreadCount'],
-    queryFn: fetchUnreadNotificationCount,
-  })
+  const { isLoading, error, data, } = useQuery({
+    queryKey: ['likeNotifications'],
+    queryFn: () => fetchUnreadNotificationCount(),
+    refetchOnWindowFocus: false,
+  });
 
-  if (status === 'loading') {
-    return <div>Loading...</div>
+  if (isLoading) {
+    return <h1 className="text-white text-center">Loading...</h1>
   }
 
-  if (status === 'error') {
+  if (error) {
     return <div>Error: {JSON.stringify(error)}</div>
   }
 
   return (
-    <h1>AniLike</h1>
-
-
+    <div>
+      <h1 className="text-white text-center">Unread Notifications: {data}</h1>
+    </div>
   )
 }
 

@@ -2,18 +2,14 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { unreadCountQuery } from './anilikeQueries';
 
-export function fetchUnreadNotificationCount() {
-    const variables = {
-        // Something here at some point
-    };
-
+async function fetchFromAnilist(query: string, variables: object) {
     const accessToken = Cookies.get('access_token');
 
-    axios
+    return axios
         .post(
             'https://graphql.anilist.co',
             {
-                query: unreadCountQuery,
+                query: query,
                 variables: variables
             },
             {
@@ -24,10 +20,11 @@ export function fetchUnreadNotificationCount() {
             }
         )
         .then(response => {
-            console.log(response.data);
-            return response.data;
-        })
-        .catch(error => {
-            console.error('Error:', error.response ? error.response.data : error.message);
+            return response.data.data;
         });
+}
+
+export async function fetchUnreadNotificationCount() {
+    const rawUnreadCount = await fetchFromAnilist(unreadCountQuery, {});
+    return rawUnreadCount.User.unreadNotificationCount;
 }
