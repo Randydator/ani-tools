@@ -18,9 +18,6 @@ function Header() {
         setToken(token);
     }, []);
 
-    // Figure out Context so multiple parts of the app can check if access token is there. 
-    // also needed in home bcs aniLike dies without access token 
-
     function clearCookies() {
         Object.keys(Cookies.get()).forEach(cookieName => {
             Cookies.remove(cookieName);
@@ -29,21 +26,21 @@ function Header() {
     }
 
     return <>
-        <Container className='header'>
+        <Container fluid className='header'>
             <Row className="justify-content-md-center">
-                <Col xs lg="2">
+                <Col xs={2}>
                     <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={clearCookies}>
                         <FaRegTrashAlt className="me-1" />
-                        Clear all cookies
+                        Clear cookies
                     </Button>
 
                 </Col>
-                <Col span={8}>
+                <Col xs={8}>
                     <Link to={"/"} className='text-decoration-none'>
                         <h1 className='text'>AniTools</h1>
                     </Link>
                 </Col>
-                <Col xs lg="2">
+                <Col xs={2}>
                     <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={token !== undefined}>
                         <FaUser className="me-1" />
                         Login

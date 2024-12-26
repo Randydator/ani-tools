@@ -20,7 +20,6 @@ function Home() {
                 </Card>
             </Link>
 
-
             <Link to="/ActivitySearch" className="p-0 border-0 text-decoration-none">
                 <Card>
                     <Card.Body>
