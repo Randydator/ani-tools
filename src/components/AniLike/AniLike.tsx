@@ -3,6 +3,7 @@ import { fetchLikeActivities, fetchReplyActivities } from "./anilikeApi"
 import LikeNotificationCard from "./NotificationCard/LikeNotificationCard";
 import ReplyNotificationCard from "./NotificationCard/ReplyNotificationCard";
 import { Col, Row } from "react-bootstrap";
+import './anilike.css'
 
 function AniLike() {
 
@@ -14,7 +15,7 @@ function AniLike() {
       return { likeNotifications, replyNotifications }
     },
     refetchOnWindowFocus: false,
-    staleTime: 50000, 
+    staleTime: 50000,
     retry: false
   });
 
@@ -27,19 +28,19 @@ function AniLike() {
   }
 
   return (
-    <>
-      <Row className="justify-content-md-center">
-        <Col xs={5} md={4} style={{ marginLeft: '2rem', marginRight: '0rem', padding: '0' }}>
+    <div>
+      <Row className="anilike-row">
+        <Col className="anilike-col">
           <h1>Like Notifications</h1>
           <LikeNotificationCard notifications={data.likeNotifications} />
         </Col>
-        <Col xs={5} md={4} style={{ marginLeft: '1rem', padding: '0' }}>
-          {/* Anilist has some api issues, I just wanna see here if I receive the correct amount*/}
+        <Col className="anilike-col">
+         {/* Anilist has some api issues, I just wanna see here if I receive the correct amount*/}
           <h1>Reply Notifications{data.replyNotifications.length !== 50 ? ' (weird)' : ''}</h1>
           <ReplyNotificationCard notifications={data.replyNotifications} />
         </Col>
       </Row>
-    </>
+    </div>
   )
 }
 

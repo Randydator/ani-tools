@@ -1,7 +1,7 @@
 .notificationDiv {
     display: flex;
     flex-wrap: wrap;
-    margin: 1rem;
+    justify-content: center;
 }
 
 .notificationCard {
@@ -11,6 +11,7 @@
 
     @media (max-width: 600px) {
         margin: 0.5rem;
+        width: 10rem;
     }
 }
 

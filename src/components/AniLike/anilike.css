@@ -1,0 +1,19 @@
+.anilike-row{
+    margin: 0rem 3rem;
+
+    h1{
+        font-size: 2rem;
+
+        @media (max-width: 600px) {
+            font-size: 1.4rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        margin: 0rem 0.8rem;
+    }
+}
+
+.anilike-col {
+    padding: 0
+}
