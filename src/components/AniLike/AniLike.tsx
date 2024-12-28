@@ -10,7 +10,7 @@ function AniLike() {
     queryKey: ['likeNotifications'],
     queryFn: async () => {
       const likeNotifications = await fetchLikeActivities(100)
-      const replyNotifications = await fetchReplyActivities(15)
+      const replyNotifications = await fetchReplyActivities(50)
       return { likeNotifications, replyNotifications }
     },
     refetchOnWindowFocus: false,
@@ -34,7 +34,8 @@ function AniLike() {
           <LikeNotificationCard notifications={data.likeNotifications} />
         </Col>
         <Col md={4}>
-          <h1>Reply Notifications{data.replyNotifications.length !== 45 ? ' (weird)' : ''}</h1>
+          {/* Anilist has some api issues, I just wanna see here if I receive the correct amount*/}
+          <h1>Reply Notifications{data.replyNotifications.length !== 50 ? ' (weird)' : ''}</h1>
           <ReplyNotificationCard notifications={data.replyNotifications} />
         </Col>
       </Row>

@@ -1,5 +1,5 @@
 import { fetchFromAnilist } from '../../utils/anilistRequestUtil';
-import { unreadCountQuery, likeActivityQuery, subscribedActivityQuery, replyActivityQuery, mentionActivityQuery } from './anilikeQueries';
+import { unreadCountQuery, likeActivityQuery, allReplyNotificationsQuery } from './anilikeQueries';
 import { LikeNotification, ReplyNotification } from './anilikeInterfaces';
 
 const pageSize = 50 // Anilist maximum page size
@@ -24,12 +24,15 @@ export async function fetchLikeActivities(notificationCount: number) {
       return resultArray;
 }
 
-export async function fetchReplyActivities(notificationOfEachTypeCount: number) {
-    const replyActivityTypes = [replyActivityQuery, subscribedActivityQuery, mentionActivityQuery]
+export async function fetchReplyActivities(notificationCount: number) {
+    const pageCount = Math.ceil(notificationCount / 50)
     const requestArray = []
 
-    for (const type of replyActivityTypes) {
-        requestArray.push(fetchFromAnilist(type, { page: 1, perPage: notificationOfEachTypeCount }))
+    for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+        // If this is last request, find out how many perPage entries to get to match notificationCount
+        const currentPageSize = (pageIndex === pageCount - 1) ? notificationCount % pageSize || pageSize : pageSize
+
+        requestArray.push(fetchFromAnilist(allReplyNotificationsQuery, { page: pageIndex + 1, perPage: currentPageSize }))
     }
 
     const result = await Promise.all(requestArray)

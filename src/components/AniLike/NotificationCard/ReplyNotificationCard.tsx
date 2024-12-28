@@ -12,7 +12,6 @@ function ReplyNotificationCard({ notifications }: ReplyNotificationCardProps) {
         .map((notification) => {
             const sanitizedUser = {
                 name: DOMPurify.sanitize(notification.user.name),
-                siteUrl: DOMPurify.sanitize(notification.user.siteUrl),
                 avatar: {
                     large: DOMPurify.sanitize(notification.user.avatar.large),
                 },

@@ -120,6 +120,74 @@ query ($page: Int, $perPage: Int)
 }
 `
 
+export const allReplyNotificationsQuery = `
+query ($page: Int, $perPage: Int) {
+  Page(perPage: $perPage, page: $page) {
+    notifications(
+      type_in: [ACTIVITY_REPLY, ACTIVITY_MENTION, ACTIVITY_REPLY_SUBSCRIBED]
+    ) {
+      ... on ActivityReplyNotification {
+        user {
+          name
+          avatar {
+            large
+          }
+        }
+        activity {
+          ... on TextActivity {
+            siteUrl
+          }
+          ... on MessageActivity {
+            siteUrl
+          }
+          ... on ListActivity {
+            siteUrl
+          }
+        }
+      }
+      ... on ActivityMentionNotification {
+        user {
+          name
+          avatar {
+            large
+          }
+        }
+        activity {
+          ... on TextActivity {
+            siteUrl
+          }
+          ... on MessageActivity {
+            siteUrl
+          }
+          ... on ListActivity {
+            siteUrl
+          }
+        }
+      }
+      ... on ActivityReplySubscribedNotification {
+        user {
+          name
+          avatar {
+            large
+          }
+        }
+        activity {
+          ... on TextActivity {
+            siteUrl
+          }
+          ... on MessageActivity {
+            siteUrl
+          }
+          ... on ListActivity {
+            siteUrl
+          }
+        }
+      }
+    }
+  }
+}
+`
+
 export const querySearchMedia = `
 query ($page: String)
 {
