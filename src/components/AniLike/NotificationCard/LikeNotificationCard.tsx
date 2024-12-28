@@ -47,7 +47,7 @@ function LikeNotificationCard({ notifications }: ReplyNotificationCardProps | Li
                     </div>
                     <Card.Body>
                         <Card.Title className="cardTitle">
-                            <p>{user.name} {(count)}</p>
+                            <p>({count}) {user.name}</p>
                         </Card.Title>
                     </Card.Body>
                 </Card>

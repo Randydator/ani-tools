@@ -1,28 +1,44 @@
 .notificationDiv {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    margin: 1rem;
 }
 
 .notificationCard {
     margin: 1rem;
     width: 16rem;
     cursor: pointer;
+
+    @media (max-width: 600px) {
+        margin: 0.5rem;
+    }
 }
 
 .cardBodyDiv {
-    height: 20rem;
+    height: 16rem;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: flex-end;
+
+    @media (max-width: 600px) {
+        height: 10rem;
+    }
 }
 
 .cardImg {
+    object-fit: scale-down;
     max-height: 100%;
     max-width: 100%;
 }
 
 .cardTitle {
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @media (max-width: 600px) {
+        font-size: 0.8rem;
+    }
 }

@@ -29,11 +29,12 @@ function Header() {
         <Container fluid className='header'>
             <Row className="justify-content-md-center">
                 <Col xs={2}>
-                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={clearCookies}>
-                        <FaRegTrashAlt className="me-1" />
-                        Clear cookies
-                    </Button>
-
+                    <div className="d-flex justify-content-center">
+                        <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={clearCookies}>
+                            <FaRegTrashAlt className="me-1" />
+                            Clear cookies
+                        </Button>
+                    </div>
                 </Col>
                 <Col xs={8}>
                     <Link to={"/"} className='text-decoration-none'>
@@ -41,10 +42,12 @@ function Header() {
                     </Link>
                 </Col>
                 <Col xs={2}>
-                    <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={token !== undefined}>
-                        <FaUser className="me-1" />
-                        Login
-                    </Button>
+                    <div className="d-flex justify-content-center">
+                        <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login} disabled={token !== undefined}>
+                            <FaUser className="me-1" />
+                            Login
+                        </Button>
+                    </div>
                 </Col>
             </Row>
         </Container>

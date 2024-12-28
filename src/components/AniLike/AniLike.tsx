@@ -29,11 +29,11 @@ function AniLike() {
   return (
     <>
       <Row className="justify-content-md-center">
-        <Col md={4}>
+        <Col xs={5} md={4} style={{ marginLeft: '2rem', marginRight: '0rem', padding: '0' }}>
           <h1>Like Notifications</h1>
           <LikeNotificationCard notifications={data.likeNotifications} />
         </Col>
-        <Col md={4}>
+        <Col xs={5} md={4} style={{ marginLeft: '1rem', padding: '0' }}>
           {/* Anilist has some api issues, I just wanna see here if I receive the correct amount*/}
           <h1>Reply Notifications{data.replyNotifications.length !== 50 ? ' (weird)' : ''}</h1>
           <ReplyNotificationCard notifications={data.replyNotifications} />
