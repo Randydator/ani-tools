@@ -1,5 +1,5 @@
 import { fetchFromAnilist } from '../../utils/anilistRequestUtil';
-import { unreadCountQuery, likeActivityQuery, allReplyNotificationsQuery } from './anilikeQueries';
+import { unreadCountQuery, likeActivityQuery, allReplyNotificationsQuery } from '../../utils/anilistQueries';
 import { LikeNotification, ReplyNotification } from './anilikeInterfaces';
 
 const pageSize = 50 // Anilist maximum page size

@@ -1,0 +1,31 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.aniForm {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    background-color: var(--clr-surface-a10);
+    border-radius: 1rem;
+    padding: 3rem;
+    gap: 1rem;
+}
+
+.icon {
+    color: var(--clr-primary-a50);
+}
+
+.iconLabel {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.aniRadioButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}

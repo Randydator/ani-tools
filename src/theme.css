@@ -33,4 +33,8 @@
         color: var(--clr-primary-a50);
         text-align: center;
     }
+
+    label, p{
+        color: var(--clr-primary-a50);
+    }
 }

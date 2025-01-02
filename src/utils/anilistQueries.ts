@@ -189,9 +189,9 @@ query ($page: Int, $perPage: Int) {
 `
 
 export const querySearchMedia = `
-query ($page: String)
+query ($title: String, $type: MediaType)
 {
-  Media(search: $page, type:ANIME) {
+  Media(search: $title, type:$type) {
     id
     title{
         english
@@ -203,10 +203,10 @@ query ($page: String)
 `
 
 export const querySearchAnimeActivity = `
-query ($page: Int, $pageNumber: Int)
+query ($userId: Int, $mediaId: Int)
 {
     Page(perPage: 50) {
-      activities(userId: $page, mediaId: $pageNumber) {
+      activities(userId: $userId, mediaId: $mediaId) {
         ... on ListActivity {
           id
           siteUrl
@@ -221,10 +221,11 @@ query ($page: Int, $pageNumber: Int)
 `
 
 export const querySearchUsername = `
-query ($page: String)
+query ($username: String)
 {
-  User(search: $page){
+  User(search: $username){
     id
+    name
   }
 }
 `

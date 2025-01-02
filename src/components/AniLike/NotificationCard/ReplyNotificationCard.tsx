@@ -5,6 +5,8 @@ import { useState } from 'react';
 
 import './notificationCard.css';
 
+
+ // TODO: Reply and mention causes duplicate notifications; make them unique
 function ReplyNotificationCard({ notifications }: ReplyNotificationCardProps) {
     const sortedNotifications = notifications
         .filter((notification) => notification.activity !== null)

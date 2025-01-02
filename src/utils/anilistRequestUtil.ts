@@ -20,5 +20,9 @@ export async function fetchFromAnilist(query: string, variables: object) {
         )
         .then(response => {
             return response.data.data;
+        })
+        .catch(error => {
+            console.error(error);
+            return error;
         });
 }
