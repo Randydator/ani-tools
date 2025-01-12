@@ -14,7 +14,8 @@ export async function fetchFromAnilist(query: string, variables: object) {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`
+                    // only send the access token if its cookie exists
+                    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
                 }
             }
         )
@@ -23,6 +24,6 @@ export async function fetchFromAnilist(query: string, variables: object) {
         })
         .catch(error => {
             console.error(error);
-            return error;
+            throw error;
         });
 }

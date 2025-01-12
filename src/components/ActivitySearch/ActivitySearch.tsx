@@ -1,17 +1,24 @@
-import { useState, forwardRef } from "react"
+import { useState, useContext } from "react"
 import { Form, FormGroup, Button, OverlayTrigger, Tooltip } from "react-bootstrap"
-import { BsQuestionCircle } from "react-icons/bs"
+import DomPurify from "dompurify"
+import { Card } from "react-bootstrap"
 
+import { UserContext } from "../Header/UserContext"
 import { useActivitySearch } from "./activitySearchApi"
 import './activitySearch.css'
+import ActivityCard from "./ActivityCard/ActivityCard"
+
 
 function ActivitySearch() {
+  const user = useContext(UserContext)
+
   const [variables, setVariables] = useState({})
   const { isLoading, error, data } = useActivitySearch(variables)
 
   const submitFunction = (event: any) => {
     event.preventDefault()
-    const searchPayload = Object.fromEntries(new FormData(event.target).entries())
+    // get all Form data, sanatize it and put it into an object
+    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString())]))
     setVariables(searchPayload)
   }
 
@@ -26,15 +33,15 @@ function ActivitySearch() {
               placement="top"
               overlay={
                 <Tooltip>
-                  Leaving this empty will search your user.
+                  Leaving this empty will search for your activities.
                 </Tooltip>
               }
             >
               <Form.Label>?</Form.Label>
-            </OverlayTrigger>
+            </OverlayTrigger> 
           </div>
 
-          <Form.Control name="username" type="text" placeholder="Username (optional)">
+          <Form.Control name="username" type="text" placeholder={user?.username || ""} required={!user?.username}>
           </Form.Control>
         </FormGroup>
 
@@ -72,12 +79,17 @@ function ActivitySearch() {
 
       <div>
         {isLoading && <p>Loading...</p>}
-        {error && <p>Error fetching data {error.message}. </p>}
+        {error && (
+          <Card className='activityCard'>
+            <Card.Body>
+              <Card.Title>
+                <p>Error: {error.message}</p>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        )}
         {data && (
-          <div>
-            <h3>Results:</h3>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
-          </div>
+            <ActivityCard activities={data} />
         )}
       </div>
     </div>

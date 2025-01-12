@@ -2,17 +2,17 @@ import './home.css';
 import { useContext } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
-import { TokenContext } from '../Header/TokenContext';
+import { UserContext } from '../Header/UserContext';
 
 function Home() {
-    const access_token = useContext(TokenContext)
+    const user = useContext(UserContext)
 
     return (
         <div className="homeBody">
-            <Link to="/AniLike" className="p-0 border-0 text-decoration-none" style={{pointerEvents: access_token === undefined ? 'none' : 'auto', opacity: access_token === undefined ? 0.5 : 1}}>
+            <Link to="/AniLike" className="p-0 border-0 text-decoration-none" style={{pointerEvents: user?.token === undefined ? 'none' : 'auto', opacity: user?.token === undefined ? 0.5 : 1}}>
                 <Card>
                     <Card.Body>
-                        <Card.Title>AniLike</Card.Title>
+                        <Card.Title>AniLike{user?.token === undefined ? ' - LOGIN REQUIRED' : ''}</Card.Title>
                         <Card.Text>
                             A tool designed to view and like notifications in an easier way.
                         </Card.Text>

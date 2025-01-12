@@ -11,3 +11,7 @@
 .login {
     color: var(--clr-primary-a20);
 }
+
+.avatar {
+    height: 3.5rem;
+}

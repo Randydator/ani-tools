@@ -208,7 +208,6 @@ query ($userId: Int, $mediaId: Int)
     Page(perPage: 50) {
       activities(userId: $userId, mediaId: $mediaId) {
         ... on ListActivity {
-          id
           siteUrl
           createdAt
           status
@@ -226,6 +225,20 @@ query ($username: String)
   User(search: $username){
     id
     name
+  }
+}
+`
+
+export const getUsernameById = `
+query ($userId: Int)
+{
+  User(id: $userId){
+    id
+    name
+    siteUrl
+    avatar {
+      medium
+    }
   }
 }
 `
