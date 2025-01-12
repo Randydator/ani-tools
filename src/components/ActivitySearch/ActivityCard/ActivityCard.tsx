@@ -1,4 +1,4 @@
-import './activitycard.css'
+import './activityCard.css'
 
 import { Card } from 'react-bootstrap'
 

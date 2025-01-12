@@ -18,14 +18,14 @@ export const useActivitySearch = (variables: any) => {
                 if (variables.username.trim() !== "") {
                     userId = await fetchFromAnilist(querySearchUsername, variables)
                 }
-            } catch (error) {
+            } catch {
                 throw new Error("User cannot be found");
             }
 
             let mediaId
             try {
                 mediaId = await fetchFromAnilist(querySearchMedia, variables)
-            } catch (error) {
+            } catch {
                 throw new Error("Media cannot be found");
             }
 
@@ -33,7 +33,7 @@ export const useActivitySearch = (variables: any) => {
             let activityData
             try {
                 activityData = await fetchFromAnilist(querySearchAnimeActivity, updatedVariables)
-            } catch (error) {
+            } catch {
                 throw new Error("Activities cannot be found");
             }
 
