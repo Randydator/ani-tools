@@ -144,6 +144,7 @@ query ($page: Int, $perPage: Int) {
             siteUrl
           }
         }
+        createdAt
       }
       ... on ActivityMentionNotification {
         user {
@@ -163,6 +164,7 @@ query ($page: Int, $perPage: Int) {
             siteUrl
           }
         }
+        createdAt
       }
       ... on ActivityReplySubscribedNotification {
         user {
@@ -182,6 +184,7 @@ query ($page: Int, $perPage: Int) {
             siteUrl
           }
         }
+        createdAt
       }
     }
   }
@@ -206,7 +209,7 @@ export const querySearchAnimeActivity = `
 query ($userId: Int, $mediaId: Int)
 {
     Page(perPage: 50) {
-      activities(userId: $userId, mediaId: $mediaId) {
+      activities(userId: $userId, mediaId: $mediaId, sort:ID) {
         ... on ListActivity {
           siteUrl
           createdAt
