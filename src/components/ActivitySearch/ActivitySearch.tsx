@@ -71,7 +71,7 @@ function ActivitySearch() {
           </div>
         </FormGroup>
 
-        <Button type="submit" style={{ color: 'var(--clr-surface-a0)', backgroundColor: 'var(--clr-primary-a0)' }}>
+        <Button type="submit" className="aniSubmitButton">
           Search
         </Button>
       </Form>

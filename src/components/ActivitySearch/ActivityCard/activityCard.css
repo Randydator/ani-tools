@@ -9,11 +9,17 @@
     margin: 1rem;
     cursor: pointer;
     min-width: 18em;
+
+    &:hover {
+        .c-footer {
+            background-color: var(--clr-surface-tonal-a20)
+        }
+    }
 }
 
 .c-footer {
     background-color: var(--clr-surface-a20);
-    padding: 0 1em
+    padding: 0 1em;
 }
 
 p {

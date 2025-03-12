@@ -44,6 +44,16 @@
         text-align: center;
         background-color: var(--clr-surface-a10);
 
+        &:hover {
+            transform: scale(1.05);
+            transition: transform 0.1s ease-in-out;
+            background-color: var(--clr-surface-tonal-a10);
+            
+            p, .card-title { 
+                color: var(--clr-primary-a30)
+            }
+        }
+
         .card-title {
             font-weight: bold;
             color: var(--clr-primary-a50);
