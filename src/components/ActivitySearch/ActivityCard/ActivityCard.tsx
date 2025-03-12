@@ -1,15 +1,10 @@
+import { ActivityCardData, ActivityCardEntries } from '../activitySearchInterfaces'
 import './activityCard.css'
 
 import { Card } from 'react-bootstrap'
 
-interface ActivityCardEntries {
-    siteUrl: string;
-    createdAt: number;
-    status: string;
-    progress: string;
-}
-
-function ActivityCard(activities: any) {
+function ActivityCard(activities: ActivityCardData) {
+    console.log("card", activities)
     // TODO: type any here is bad but I'm too lazy to do it properly right now
     const animeTitle = activities.activities.animeTitle
     const activityList: ActivityCardEntries[] = activities.activities.Page.activities
@@ -27,8 +22,8 @@ function ActivityCard(activities: any) {
     }
 
     return (
-        <div>
-            {activityList.map(({ siteUrl, progress, status }, index) => (
+        <div className='activityBox'>
+            {activityList.map(({ siteUrl, progress, status, createdAt }, index) => (
                 <Card key={index} className='activityCard'
                     onClick={() => {
                         window.open(siteUrl, '_blank', 'noopener,noreferrer');
@@ -39,6 +34,9 @@ function ActivityCard(activities: any) {
                             <p>{progress ? status + ' ' + progress : status}</p>
                         </Card.Title>
                     </Card.Body>
+                    <Card.Footer className='c-footer'>
+                        <p>{new Date(createdAt * 1000).toLocaleString([], {hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit'})}</p>
+                    </Card.Footer>
                 </Card>
             ))}
         </div>

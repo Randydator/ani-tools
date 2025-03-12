@@ -14,6 +14,13 @@
     gap: 1rem;
 }
 
+.aniInput {
+    &:focus {
+        box-shadow: 0 0 0 .2rem var(--clr-primary-a40);
+        border: none;
+    }
+}
+
 .icon {
     color: var(--clr-primary-a50);
 }
@@ -21,11 +28,22 @@
 .iconLabel {
     display: flex;
     flex-direction: row;
-
 }
 
 .aniRadioButtons {
     display: flex;
     flex-direction: row;
     gap: 1rem;
+}
+
+.aniSubmitButton {
+    color: var(--clr-surface-a0);
+    background-color: var(--clr-primary-a30);
+
+    &:hover {
+        background-color: var(--clr-primary-a10);
+        color: var(--clr-surface-a0);
+        transform: scale(1.05);
+        transition: transform 0.1s ease-in-out;
+    }
 }

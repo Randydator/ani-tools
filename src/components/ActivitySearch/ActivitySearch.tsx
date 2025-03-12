@@ -7,7 +7,7 @@ import { UserContext } from "../Header/UserContext"
 import { useActivitySearch } from "./activitySearchApi"
 import './activitySearch.css'
 import ActivityCard from "./ActivityCard/ActivityCard"
-
+import { FaQuestionCircle } from "react-icons/fa"
 
 function ActivitySearch() {
   const user = useContext(UserContext)
@@ -28,7 +28,8 @@ function ActivitySearch() {
 
         <FormGroup controlId="usernameInput">
           <div className="iconLabel">
-            <Form.Label>User:</Form.Label>
+            <Form.Label>User: </Form.Label>
+            <Form.Label style={{ flex: 1 }} />
             <OverlayTrigger
               placement="top"
               overlay={
@@ -37,17 +38,19 @@ function ActivitySearch() {
                 </Tooltip>
               }
             >
-              <Form.Label>?</Form.Label>
-            </OverlayTrigger> 
+              <Form.Label>
+                <FaQuestionCircle className="icon" />
+              </Form.Label>
+            </OverlayTrigger>
           </div>
 
-          <Form.Control name="username" type="text" placeholder={user?.username || ""} required={!user?.username}>
+          <Form.Control name="username" type="text" placeholder={user?.username || ""} required={!user?.username} className="aniInput">
           </Form.Control>
         </FormGroup>
 
         <FormGroup controlId="animeTitleInput">
           <Form.Label>Title:</Form.Label>
-          <Form.Control name="title" type="text" placeholder="Title of an anime or manga" required>
+          <Form.Control name="title" type="text" placeholder="Title of anime or manga" required className="aniInput">
           </Form.Control>
         </FormGroup>
 
@@ -72,7 +75,7 @@ function ActivitySearch() {
           </div>
         </FormGroup>
 
-        <Button type="submit" style={{ color: 'var(--clr-surface-a0)', backgroundColor: 'var(--clr-primary-a0)' }}>
+        <Button type="submit" className="aniSubmitButton" style={{border: 'none'}}>
           Search
         </Button>
       </Form>
@@ -89,7 +92,7 @@ function ActivitySearch() {
           </Card>
         )}
         {data && (
-            <ActivityCard activities={data} />
+          <ActivityCard activities={data} />
         )}
       </div>
     </div>
