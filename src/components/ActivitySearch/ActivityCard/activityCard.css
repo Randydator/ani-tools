@@ -2,3 +2,7 @@
     margin: 1rem;
     cursor: pointer;
 }
+
+.c-footer {
+    background-color: var(--clr-surface-a20);
+}

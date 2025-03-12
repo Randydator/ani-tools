@@ -8,7 +8,7 @@
     margin: 1rem;
     width: 14rem;
     cursor: pointer;
-
+    
     @media (max-width: 600px) {
         margin: 0.5rem;
         width: 8rem;
@@ -21,6 +21,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    padding: 0 1em;
 
     @media (max-width: 600px) {
         height: 10rem;

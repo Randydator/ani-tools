@@ -5,9 +5,8 @@
     padding: 1rem;
 }
 
-.card {
+.home-card {
     background-color: var(--clr-surface-a10);
-    color: white;
     text-align: center;
     width: 32rem;
     box-shadow: 0 2px rgba(0, 0, 0, 0.2);
@@ -15,12 +14,4 @@
     @media (max-width: 600px) {
         width: 20rem;
     }
-
-    
-.card-title {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: var(--clr-primary-a50);
-}
-
 }

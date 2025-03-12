@@ -3,19 +3,20 @@ import { fetchFromAnilist } from "../../utils/anilistRequestUtil";
 import { querySearchMedia, querySearchAnimeActivity, querySearchUsername } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
+import { ActivitySearchVariables } from "./activitySearchInterfaces.ts";
 
-export const useActivitySearch = (variables: any) => {
+export const useActivitySearch = (variables: ActivitySearchVariables | {}) => { 
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
 
     return useQuery({
         queryKey: ['activitySearch', variables],
         queryFn: async () => {
-            // try catch each request for proper error handling
 
+            // try catch each request for proper error handling
             let userId
             try {
-                if (variables.username.trim() !== "") {
+                if ('username' in variables && variables.username.trim() !== "") {
                     userId = await fetchFromAnilist(querySearchUsername, variables)
                 }
             } catch {

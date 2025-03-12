@@ -8,8 +8,6 @@ import { useActivitySearch } from "./activitySearchApi"
 import './activitySearch.css'
 import ActivityCard from "./ActivityCard/ActivityCard"
 
-// TODO: add activity date to card
-
 function ActivitySearch() {
   const user = useContext(UserContext)
 

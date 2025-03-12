@@ -29,12 +29,24 @@
         background-color: var(--clr-surface-a0);
     }
 
-    h1{
+    h1 {
         color: var(--clr-primary-a50);
         text-align: center;
     }
 
-    label, p{
+    label,
+    p {
         color: var(--clr-primary-a50);
+    }
+
+    .card {
+        box-shadow: 0 0.2em rgba(0, 0, 0, 0.2);
+        text-align: center;
+        background-color: var(--clr-surface-a10);
+
+        .card-title {
+            font-weight: bold;
+            color: var(--clr-primary-a50);
+        }
     }
 }

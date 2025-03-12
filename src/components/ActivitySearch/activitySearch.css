@@ -14,6 +14,10 @@
     gap: 1rem;
 }
 
+.cardDiv {
+    
+}
+
 .icon {
     color: var(--clr-primary-a50);
 }

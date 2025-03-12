@@ -10,7 +10,7 @@ function Home() {
     return (
         <div className="homeBody">
             <Link to="/AniLike" className="p-0 border-0 text-decoration-none" style={{pointerEvents: user?.token === undefined ? 'none' : 'auto', opacity: user?.token === undefined ? 0.5 : 1}}>
-                <Card>
+                <Card className='home-card'>
                     <Card.Body>
                         <Card.Title>AniLike{user?.token === undefined ? ' - LOGIN REQUIRED' : ''}</Card.Title>
                         <Card.Text>
@@ -21,7 +21,7 @@ function Home() {
             </Link>
 
             <Link to="/ActivitySearch" className="p-0 border-0 text-decoration-none">
-                <Card>
+                <Card className='home-card'>
                     <Card.Body>
                         <Card.Title>Activity Search</Card.Title>
                         <Card.Text>
