@@ -1,8 +1,21 @@
+.activityBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1em 12em 2em;
+}
+
 .activityCard {
     margin: 1rem;
     cursor: pointer;
+    min-width: 18em;
 }
 
 .c-footer {
     background-color: var(--clr-surface-a20);
+    padding: 0 1em
+}
+
+p {
+    margin: 0.5em 0;
 }

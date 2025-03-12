@@ -22,7 +22,7 @@ function ActivityCard(activities: ActivityCardData) {
     }
 
     return (
-        <div>
+        <div className='activityBox'>
             {activityList.map(({ siteUrl, progress, status, createdAt }, index) => (
                 <Card key={index} className='activityCard'
                     onClick={() => {
