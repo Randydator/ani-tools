@@ -8,6 +8,7 @@ import { useActivitySearch } from "./activitySearchApi"
 import './activitySearch.css'
 import ActivityCard from "./ActivityCard/ActivityCard"
 
+// TODO: add activity date to card
 
 function ActivitySearch() {
   const user = useContext(UserContext)
@@ -47,7 +48,7 @@ function ActivitySearch() {
 
         <FormGroup controlId="animeTitleInput">
           <Form.Label>Title:</Form.Label>
-          <Form.Control name="title" type="text" placeholder="Title of an anime or manga" required>
+          <Form.Control name="title" type="text" placeholder="Title of anime or manga" required>
           </Form.Control>
         </FormGroup>
 

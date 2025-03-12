@@ -52,7 +52,7 @@ function ReplyNotificationCard({ notifications }: ReplyNotificationCardProps) {
 
     const [notificationList, setNotifications] = useState(uniqueNotifications);
 
-    // IDEA: expand button next to name (where count normally is) 
+    // TODO IDEA: expand button next to name (where count normally is) 
     // when pressed, you can preview the activity text, maybe even comments??
 
     return (
