@@ -3,18 +3,20 @@ import { Form, FormGroup, Button, OverlayTrigger, Tooltip } from "react-bootstra
 import DomPurify from "dompurify"
 import { Card } from "react-bootstrap"
 
+import './activitySearch.css'
 import { UserContext } from "../Header/UserContext"
 import { useActivitySearch } from "./activitySearchApi"
-import './activitySearch.css'
 import ActivityCard from "./ActivityCard/ActivityCard"
 import { FaQuestionCircle } from "react-icons/fa"
+import PreviewSearch from "../pageElements/previewSearch/previewSearch"
+import { MediaType } from "../../utils/anilistInterfaces"
 
 function ActivitySearch() {
   const user = useContext(UserContext)
 
   const [variables, setVariables] = useState({})
   const { isLoading, error, data } = useActivitySearch(variables)
-
+  
   const submitFunction = (event: any) => {
     event.preventDefault()
     // get all Form data, sanatize it and put it into an object
@@ -24,7 +26,7 @@ function ActivitySearch() {
 
   return (
     <div className="formContainer">
-      <Form className="aniForm" onSubmit={submitFunction}>
+      <Form className="aniForm" onSubmit={submitFunction} id="activitySearchForm">
 
         <FormGroup controlId="usernameInput">
           <div className="iconLabel">
@@ -48,11 +50,18 @@ function ActivitySearch() {
           </Form.Control>
         </FormGroup>
 
-        <FormGroup controlId="animeTitleInput">
-          <Form.Label>Title:</Form.Label>
-          <Form.Control name="title" type="text" placeholder="Title of anime or manga" required className="aniInput">
-          </Form.Control>
-        </FormGroup>
+        <div className="titleInput">
+          <FormGroup controlId="animeTitleInput">
+            <Form.Label>Title:</Form.Label>
+            <PreviewSearch
+              name="title"
+              type={MediaType.ANIME}
+              placeholder="Title of anime or manga"
+              required
+              className="aniInput"
+            />
+          </FormGroup>
+        </div>
 
         <FormGroup controlId="typeSelect">
           <Form.Label>Type:</Form.Label>
@@ -75,7 +84,7 @@ function ActivitySearch() {
           </div>
         </FormGroup>
 
-        <Button type="submit" className="aniSubmitButton" style={{border: 'none'}}>
+        <Button type="submit" className="aniSubmitButton" style={{ border: 'none' }}>
           Search
         </Button>
       </Form>

@@ -4,8 +4,6 @@
         max-height: 20em;
         overflow-y: scroll;
         border-radius: 0.5em;
-
-
     }
 
 
@@ -19,9 +17,8 @@
             background-color: var(--clr-surface-a10);
             border: var(--bs-list-group-border-width) solid var(--clr-surface-tonal-a20);
         }
+
         overflow: hidden;
-
-
 
         .listGroupItem {
             display: flex;
@@ -35,12 +32,23 @@
                 transition: transform 0.1s ease-in-out;
             }
 
+            &:focus {
+                background-color: var(--clr-surface-tonal-a20);
+                transform: scale(1.05);
+                transition: transform 0.1s ease-in-out;
+            }
+
             &:not(:hover) {
                 transform: scale(1);
                 transition: transform 0.1s ease-in-out;
             }
 
         }
+
+        list-group-item:focus {
+            background-color: red; /* or any other color you want to use for hover */
+            /* Add other styles to mimic hover effect */
+          }
 
     }
 

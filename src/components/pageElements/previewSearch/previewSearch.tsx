@@ -3,13 +3,14 @@ import { FormControl, ListGroup, ListGroupItem, Image } from 'react-bootstrap'
 import { usePreviewSearch } from './previewSearchApi'
 import { MediaType, MediaPreview } from '../../../utils/anilistInterfaces';
 import './previewSearch.css'
+import DomPurify from "dompurify"
 
 type PreviewSearchProps = {
     type: MediaType,
     onPreviewClicked?: (item: any) => void
 }
 
-function PreviewSearch({ type, onPreviewClicked }: PreviewSearchProps) {
+function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
     const [searchTerm, setSearchTerm] = useState('')
     const [searchCompleted, setSearchCompleted] = useState(false);
     const [showPopup, setShowPopup] = useState(true);
@@ -52,21 +53,26 @@ function PreviewSearch({ type, onPreviewClicked }: PreviewSearchProps) {
             return;
         }
         const timer = setTimeout(() => {
+            // show popup for form case where you pressed enter, popup disappeared but you are still in search box
+            setShowPopup(true);
             setSearchCompleted(true);
         }, timeBeforePopup);
 
         return () => clearTimeout(timer);
     }, [searchTerm]);
-    
-    
-    const { isLoading, error, data } = usePreviewSearch({ searchTerm: searchTerm, type: type }, searchCompleted)
+
+
+    const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm), type: type }, searchCompleted)
+
+    // to set searchCompleted to false again after search
+    useEffect(() => {
+        setSearchCompleted(false);
+    }, [data]);
 
     return (
         <div className='previewSearch' ref={containerRef}>
             <FormControl
-                name="previewSearch"
-                type="text"
-                placeholder="Title of anime or manga"
+                {...props}
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 onClick={onSearchboxClick}
@@ -83,9 +89,9 @@ function PreviewSearch({ type, onPreviewClicked }: PreviewSearchProps) {
                         {data.map((item, index) => (
                             <ListGroupItem key={index} className="listGroupItem" action onClick={() => handlePreviewClick(item)}>
                                 <p>
-                                    {item.title.userPreferred }
+                                    {DomPurify.sanitize(item.title.userPreferred)}
                                 </p>
-                                <Image src={item.coverImage.medium} width={50} height={60} rounded />
+                                <Image src={DomPurify.sanitize(item.coverImage.medium)} width={50} height={60} rounded />
                             </ListGroupItem>
                         ))}
                     </ListGroup>
@@ -94,6 +100,4 @@ function PreviewSearch({ type, onPreviewClicked }: PreviewSearchProps) {
         </div>
     )
 }
-
 export default PreviewSearch
-

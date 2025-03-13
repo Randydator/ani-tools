@@ -12,6 +12,11 @@
     border-radius: 1rem;
     padding: 3rem;
     gap: 1rem;
+    width: 30em;
+
+    @media (max-width: 600px) {
+        width: 20em;
+    }
 }
 
 .aniInput {
@@ -37,12 +42,12 @@
 }
 
 .aniSubmitButton {
-    color: var(--clr-surface-a0);
-    background-color: var(--clr-primary-a30);
+    color: var(--clr-surface-a0) !important;
+    background-color: var(--clr-primary-a30) !important;
 
     &:hover {
-        background-color: var(--clr-primary-a10);
-        color: var(--clr-surface-a0);
+        background-color: var(--clr-primary-a10) !important;
+        color: var(--clr-surface-a0) !important;
         transform: scale(1.05);
         transition: transform 0.1s ease-in-out;
     }
