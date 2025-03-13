@@ -53,8 +53,9 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
             return;
         }
         const timer = setTimeout(() => {
-            // show popup for form case where you pressed enter, popup disappeared but you are still in search box
-            setShowPopup(true);
+            // I can't trigger showPopup here because when I press enter to select an item, it changes the text, which triggers the open popup here. 
+            // When navigating with mouse, horrible user experience. TODO: Nice keyboard controls
+
             setSearchCompleted(true);
         }, timeBeforePopup);
 
