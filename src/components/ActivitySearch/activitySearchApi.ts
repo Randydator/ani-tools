@@ -3,7 +3,7 @@ import { fetchFromAnilist } from "../../utils/anilistRequestUtil";
 import { querySearchMedia, querySearchAnimeActivity, querySearchUsername } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
-import { ActivitySearchVariables } from "./activitySearchInterfaces.ts";
+import { ActivitySearchVariables } from "../../utils/anilistInterfaces";
 
 export const useActivitySearch = (variables: ActivitySearchVariables | {}) => { 
     const user = useContext(UserContext)

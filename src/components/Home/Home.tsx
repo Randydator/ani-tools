@@ -3,6 +3,8 @@ import { useContext } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../Header/UserContext';
+import PreviewSearch from '../pageElements/previewSearch/previewSearch';
+import { MediaType } from '../../utils/anilistInterfaces';
 
 function Home() {
     const user = useContext(UserContext)
@@ -30,6 +32,8 @@ function Home() {
                     </Card.Body>
                 </Card>
             </Link>
+
+            <PreviewSearch type={MediaType.ANIME}/>
         </div>
     );
 }

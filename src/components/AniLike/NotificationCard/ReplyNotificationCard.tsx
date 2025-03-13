@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 import { Card } from 'react-bootstrap';
-import { ReplyNotificationCardProps } from '../anilikeInterfaces';
+import { ReplyNotificationCardProps } from '../../../utils/anilistInterfaces';
 import { useState } from 'react';
 
 import './notificationCard.css';
