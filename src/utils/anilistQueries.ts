@@ -249,14 +249,14 @@ query ($userId: Int)
 export const querySearchMediaPreview = `
 query ($searchTerm: String, $type: MediaType)
 {
-  Page (perPage: 10) {
+  Page (perPage: 20) {
     media (search:$searchTerm, type:$type) {
       title {
         userPreferred
       }
       id
       coverImage {
-        large
+        medium
       }
 
     }

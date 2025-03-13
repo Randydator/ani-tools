@@ -7,13 +7,11 @@ export const usePreviewSearch = (variables: { searchTerm: string; type: MediaTyp
     return useQuery({
         queryKey: ['previewSearch', variables],
         queryFn: async () => {
-            if (variables.searchTerm.trim() === "") return
-            
+            if (variables.searchTerm.trim() === "") return []
+
             const rawPreviewData =  await fetchFromAnilist(querySearchMediaPreview, variables)
             const previewData: MediaPreview[] = rawPreviewData.Page.media
             return previewData
-
-
         },
         retry: false,
         enabled: enabled,

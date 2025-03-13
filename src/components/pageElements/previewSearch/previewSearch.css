@@ -1,0 +1,48 @@
+.previewSearch {
+
+    .popUp {
+        max-height: 20em;
+        overflow-y: scroll;
+        border-radius: 0.5em;
+
+
+    }
+
+
+    .listGroup {
+        .list-group-item {
+            position: relative;
+            display: block;
+            padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+            color: red;
+            text-decoration: none;
+            background-color: var(--clr-surface-a10);
+            border: var(--bs-list-group-border-width) solid var(--clr-surface-tonal-a20);
+        }
+        overflow: hidden;
+
+
+
+        .listGroupItem {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+
+            &:hover {
+                background-color: var(--clr-surface-tonal-a20);
+                transform: scale(1.05);
+                transition: transform 0.1s ease-in-out;
+            }
+
+            &:not(:hover) {
+                transform: scale(1);
+                transition: transform 0.1s ease-in-out;
+            }
+
+        }
+
+    }
+
+
+}

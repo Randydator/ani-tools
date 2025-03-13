@@ -34,7 +34,7 @@ export interface MediaPreview {
         userPreferred: string;
     };
     coverImage: {
-      large: string;
+      medium: string;
     };
   }
 
