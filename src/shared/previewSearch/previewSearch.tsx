@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { FormControl, ListGroup, ListGroupItem, Image } from 'react-bootstrap'
 import { usePreviewSearch } from './previewSearchApi'
-import { MediaType, MediaPreview } from '../../../utils/anilistInterfaces';
+import { MediaType, MediaPreview } from '../../utils/anilistInterfaces';
 import './previewSearch.css'
 import DomPurify from "dompurify"
 

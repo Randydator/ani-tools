@@ -8,7 +8,7 @@ import { UserContext } from "../Header/UserContext"
 import { useActivitySearch } from "./activitySearchApi"
 import ActivityCard from "./ActivityCard/ActivityCard"
 import { FaQuestionCircle } from "react-icons/fa"
-import PreviewSearch from "../pageElements/previewSearch/previewSearch"
+import PreviewSearch from "../../shared/previewSearch/previewSearch"
 import { MediaType } from "../../utils/anilistInterfaces"
 
 function ActivitySearch() {
@@ -20,7 +20,7 @@ function ActivitySearch() {
   const submitFunction = (event: any) => {
     event.preventDefault()
     // get all Form data, sanatize it and put it into an object
-    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString())]))
+    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString().trim())]))
     setVariables(searchPayload)
   }
 

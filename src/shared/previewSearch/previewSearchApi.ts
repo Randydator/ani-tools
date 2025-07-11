@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFromAnilist } from "../../../utils/anilistRequestUtil";
-import { querySearchMediaPreview } from "../../../utils/anilistQueries";
-import { MediaPreview, MediaType } from "../../../utils/anilistInterfaces";
+import { fetchFromAnilist } from "../../utils/anilistRequestUtil";
+import { querySearchMediaPreview } from "../../utils/anilistQueries";
+import { MediaPreview, MediaType } from "../../utils/anilistInterfaces";
 
 export const usePreviewSearch = (variables: { searchTerm: string; type: MediaType }, enabled: boolean) => {
     return useQuery({
