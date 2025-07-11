@@ -4,6 +4,7 @@ import { usePreviewSearch } from './previewSearchApi'
 import { MediaType, MediaPreview } from '../../utils/anilistInterfaces';
 import './previewSearch.css'
 import DomPurify from "dompurify"
+import useDebounce from './useDebounce';
 
 type PreviewSearchProps = {
     type: MediaType,
@@ -16,7 +17,13 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     const [showPopup, setShowPopup] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const timeBeforePopup = 1000;
+    const onInputChange = () => {
+        // here code that runs after debounce
+        setSearchCompleted(true);
+        console.log("State value:", searchTerm);
+    };
+    const debouncedOnChange = useDebounce(onInputChange);
+
 
     const onSearchboxClick = () => {
         setShowPopup(true);
@@ -46,22 +53,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
         };
     }, []);
 
-    // timer delay
-    useEffect(() => {
-        if (!searchTerm) {
-            setSearchCompleted(false);
-            return;
-        }
-        const timer = setTimeout(() => {
-            // I can't trigger showPopup here because when I press enter to select an item, it changes the text, which triggers the open popup here. 
-            // When navigating with mouse, horrible user experience. TODO: Nice keyboard controls
-
-            setSearchCompleted(true);
-        }, timeBeforePopup);
-
-        return () => clearTimeout(timer);
-    }, [searchTerm]);
-
 
     const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm), type: type }, searchCompleted)
 
@@ -75,7 +66,10 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
             <FormControl
                 {...props}
                 value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={e => {
+                    debouncedOnChange();
+                    setSearchTerm(e.target.value)
+                }}
                 onClick={onSearchboxClick}
                 autoComplete="off"
             />
