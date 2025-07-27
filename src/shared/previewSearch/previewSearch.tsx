@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { FormControl, ListGroup, ListGroupItem, Image } from 'react-bootstrap'
 import { usePreviewSearch } from './previewSearchApi'
 import { MediaType, MediaPreview } from '../../utils/anilistInterfaces';
@@ -17,20 +17,20 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     const [showPopup, setShowPopup] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const keyboardItemSelectCss = 'keyboardItemSelect';
+    const isFirstArrowKeyInputRef = useRef(true); // when popup resets, the first arrow key press should always go to first item
     let selectedRecommendationItem: number = 0;
-    let isFirstArrowKeyInput: boolean = true // when popup resets, the first arrow key press should always go to first item
 
 
     const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm.trim()), type: type }, searchCompleted)
 
-    function resetPopUp() {
+    const resetPopUp = useCallback(() => {
         setShowPopup(false);
-        isFirstArrowKeyInput = true
+        isFirstArrowKeyInputRef.current = true
         const recommendationListItems = document.querySelectorAll('.listGroupItem');
         recommendationListItems.forEach((item) => {
             item.classList.remove(keyboardItemSelectCss);
         });
-    }
+    }, [setShowPopup, isFirstArrowKeyInputRef, keyboardItemSelectCss]);
 
     const onInputChange = () => {
         // here code that runs after debounce
@@ -41,12 +41,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
 
     const onSearchboxClick = () => {
         setShowPopup(true);
-    }
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-            resetPopUp()
-        }
     }
 
     function handlePreviewItemClick(item: MediaPreview) {
@@ -78,8 +72,8 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
             case 'Tab':
                 e.preventDefault();
                 // if this is first arrow key input of opened popup
-                if (isFirstArrowKeyInput) {
-                    isFirstArrowKeyInput = false;
+                if (isFirstArrowKeyInputRef.current) {
+                    isFirstArrowKeyInputRef.current = false;
                     recommendationListItems[0].classList.add(keyboardItemSelectCss);
                     break;
                 }
@@ -102,11 +96,17 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
 
     // to remove popup on click outside
     useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                resetPopUp()
+            }
+        }
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [resetPopUp]);
 
     // to set searchCompleted to false again after search
     useEffect(() => {
@@ -139,7 +139,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                                 <p>
                                     {DomPurify.sanitize(item.title.userPreferred)}
                                 </p>
-                                <Image src={DomPurify.sanitize(item.coverImage.medium)} width={50} height={60} rounded />
+                                <Image src={DomPurify.sanitize(item.coverImage.medium)} width="50px" height="60px" rounded />
                             </ListGroupItem>
                         ))}
                     </ListGroup>
