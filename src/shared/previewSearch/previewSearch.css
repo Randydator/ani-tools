@@ -1,23 +1,18 @@
 .previewSearch {
+    position: relative;
 
     .popUp {
+        position: absolute;
+        top: 100%;
+        z-index: 1;
         max-height: 20em;
         overflow-y: scroll;
         border-radius: 0.5em;
+        width: 100%;
+        margin-top: 0.4em;
     }
 
-
     .listGroup {
-        .list-group-item {
-            position: relative;
-            display: block;
-            padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
-            color: red;
-            text-decoration: none;
-            background-color: var(--clr-surface-a10);
-            border: var(--bs-list-group-border-width) solid var(--clr-surface-tonal-a20);
-        }
-
         overflow: hidden;
 
         .listGroupItem {
@@ -25,32 +20,21 @@
             align-items: center;
             justify-content: space-between;
             overflow: hidden;
+            background-color: var(--clr-surface-a10);
+            border: var(--bs-list-group-border-width) solid var(--clr-surface-tonal-a20);
 
             &:hover {
                 background-color: var(--clr-surface-tonal-a20);
                 transform: scale(1.05);
                 transition: transform 0.1s ease-in-out;
             }
-
-            &:focus {
-                background-color: var(--clr-surface-tonal-a20);
-                transform: scale(1.05);
-                transition: transform 0.1s ease-in-out;
-            }
-
-            &:not(:hover) {
-                transform: scale(1);
-                transition: transform 0.1s ease-in-out;
-            }
-
         }
 
-        list-group-item:focus {
-            background-color: red; /* or any other color you want to use for hover */
-            /* Add other styles to mimic hover effect */
-          }
-
+        .keyboardItemSelect {
+            background-color: var(--clr-surface-tonal-a20);
+            transform: scale(1.05);
+            transition: transform 0.1s ease-in-out;
+        }
     }
-
 
 }

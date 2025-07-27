@@ -19,11 +19,10 @@
     }
 }
 
-.aniInput {
-    &:focus {
-        box-shadow: 0 0 0 .2rem var(--clr-primary-a40);
-        border: none;
-    }
+.aniInput, .aniInput:focus {
+    box-shadow: none;
+    border: none;
+    outline: none;
 }
 
 .icon {

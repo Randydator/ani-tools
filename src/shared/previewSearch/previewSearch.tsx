@@ -16,6 +16,21 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     const [searchCompleted, setSearchCompleted] = useState(false);
     const [showPopup, setShowPopup] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
+    const keyboardItemSelectCss = 'keyboardItemSelect';
+    let selectedRecommendationItem: number = 0;
+    let isFirstArrowKeyInput: boolean = true // when popup resets, the first arrow key press should always go to first item
+
+
+    const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm.trim()), type: type }, searchCompleted)
+
+    function resetPopUp() {
+        setShowPopup(false);
+        isFirstArrowKeyInput = true
+        const recommendationListItems = document.querySelectorAll('.listGroupItem');
+        recommendationListItems.forEach((item) => {
+            item.classList.remove(keyboardItemSelectCss);
+        });
+    }
 
     const onInputChange = () => {
         // here code that runs after debounce
@@ -24,24 +39,64 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     };
     const debouncedOnChange = useDebounce(onInputChange);
 
-
     const onSearchboxClick = () => {
         setShowPopup(true);
     }
 
     const handleClickOutside = (event: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-            setShowPopup(false);
+            resetPopUp()
         }
     }
 
-    function handlePreviewClick(item: MediaPreview) {
+    function handlePreviewItemClick(item: MediaPreview) {
         setSearchTerm(item.title.userPreferred)
-        setShowPopup(false)
+        resetPopUp()
 
         // trigger callback for function given to element
         if (onPreviewClicked) {
             onPreviewClicked(item);
+        }
+    }
+
+    function handleKeyboardEvent(e: React.KeyboardEvent<HTMLInputElement>) {
+        const recommendationListItems = document.querySelectorAll('.listGroupItem');
+        if (recommendationListItems.length === 0) return;
+        if (!showPopup) setShowPopup(true);
+
+        function getSelectedItem() {
+            return recommendationListItems[selectedRecommendationItem];
+        }
+
+        switch (e.key) {
+            case 'Enter':
+                e.preventDefault();
+                if (!data) return;
+                handlePreviewItemClick(data[selectedRecommendationItem]);
+                break;
+            case 'ArrowDown':
+            case 'Tab':
+                e.preventDefault();
+                // if this is first arrow key input of opened popup
+                if (isFirstArrowKeyInput) {
+                    isFirstArrowKeyInput = false;
+                    recommendationListItems[0].classList.add(keyboardItemSelectCss);
+                    break;
+                }
+                getSelectedItem().classList.remove(keyboardItemSelectCss);
+                selectedRecommendationItem = (selectedRecommendationItem + 1) % recommendationListItems.length;
+                getSelectedItem().classList.add(keyboardItemSelectCss);
+                getSelectedItem().scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                getSelectedItem().classList.remove(keyboardItemSelectCss);
+                selectedRecommendationItem = (selectedRecommendationItem - 1 + recommendationListItems.length) % recommendationListItems.length;
+                getSelectedItem().classList.add(keyboardItemSelectCss);
+                getSelectedItem().scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                break;
+            default:
+                break;
         }
     }
 
@@ -52,9 +107,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-
-    const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm), type: type }, searchCompleted)
 
     // to set searchCompleted to false again after search
     useEffect(() => {
@@ -71,6 +123,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                     setSearchTerm(e.target.value)
                 }}
                 onClick={onSearchboxClick}
+                onKeyDown={handleKeyboardEvent}
                 autoComplete="off"
             />
 
@@ -82,7 +135,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                 {data && (
                     <ListGroup className="listGroup">
                         {data.map((item, index) => (
-                            <ListGroupItem key={index} className="listGroupItem" action onClick={() => handlePreviewClick(item)}>
+                            <ListGroupItem key={index} className="listGroupItem" onClick={() => handlePreviewItemClick(item)}>
                                 <p>
                                     {DomPurify.sanitize(item.title.userPreferred)}
                                 </p>
