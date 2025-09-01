@@ -5,6 +5,7 @@ import { MediaType, MediaPreview } from '../../utils/anilistInterfaces';
 import './previewSearch.css'
 import DomPurify from "dompurify"
 import useDebounce from './useDebounce';
+import { handleKeyboardEvent } from './previewSearchKeyboardHandler';
 
 type PreviewSearchProps = {
     type: MediaType,
@@ -18,8 +19,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     const containerRef = useRef<HTMLDivElement>(null);
     const keyboardItemSelectCss = 'keyboardItemSelect';
     const isFirstArrowKeyInputRef = useRef(true); // when popup resets, the first arrow key press should always go to first item
-    let selectedRecommendationItem: number = 0;
-
 
     const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm.trim()), type: type }, searchCompleted)
 
@@ -43,7 +42,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
         setShowPopup(true);
     }
 
-    function handlePreviewItemClick(item: MediaPreview) {
+    function selectPreviewItem(item: MediaPreview) {
         setSearchTerm(item.title.userPreferred)
         resetPopUp()
 
@@ -53,45 +52,8 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
         }
     }
 
-    function handleKeyboardEvent(e: React.KeyboardEvent<HTMLInputElement>) {
-        const recommendationListItems = document.querySelectorAll('.listGroupItem');
-        if (recommendationListItems.length === 0) return;
-        if (!showPopup) setShowPopup(true);
-
-        function getSelectedItem() {
-            return recommendationListItems[selectedRecommendationItem];
-        }
-
-        switch (e.key) {
-            case 'Enter':
-                e.preventDefault();
-                if (!data) return;
-                handlePreviewItemClick(data[selectedRecommendationItem]);
-                break;
-            case 'ArrowDown':
-            case 'Tab':
-                e.preventDefault();
-                // if this is first arrow key input of opened popup
-                if (isFirstArrowKeyInputRef.current) {
-                    isFirstArrowKeyInputRef.current = false;
-                    recommendationListItems[0].classList.add(keyboardItemSelectCss);
-                    break;
-                }
-                getSelectedItem().classList.remove(keyboardItemSelectCss);
-                selectedRecommendationItem = (selectedRecommendationItem + 1) % recommendationListItems.length;
-                getSelectedItem().classList.add(keyboardItemSelectCss);
-                getSelectedItem().scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                break;
-            case 'ArrowUp':
-                e.preventDefault();
-                getSelectedItem().classList.remove(keyboardItemSelectCss);
-                selectedRecommendationItem = (selectedRecommendationItem - 1 + recommendationListItems.length) % recommendationListItems.length;
-                getSelectedItem().classList.add(keyboardItemSelectCss);
-                getSelectedItem().scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                break;
-            default:
-                break;
-        }
+    function handleKeyboardEventWrapper(e: React.KeyboardEvent<HTMLInputElement>) {
+        handleKeyboardEvent(e, showPopup, setShowPopup, isFirstArrowKeyInputRef, data, selectPreviewItem, keyboardItemSelectCss);
     }
 
     // to remove popup on click outside
@@ -123,7 +85,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                     setSearchTerm(e.target.value)
                 }}
                 onClick={onSearchboxClick}
-                onKeyDown={handleKeyboardEvent}
+                onKeyDown={handleKeyboardEventWrapper}
                 autoComplete="off"
             />
 
@@ -135,7 +97,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                 {data && (
                     <ListGroup className="listGroup">
                         {data.map((item, index) => (
-                            <ListGroupItem key={index} className="listGroupItem" onClick={() => handlePreviewItemClick(item)}>
+                            <ListGroupItem key={index} className="listGroupItem" onClick={() => selectPreviewItem(item)}>
                                 <p>
                                     {DomPurify.sanitize(item.title.userPreferred)}
                                 </p>

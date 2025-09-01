@@ -43,9 +43,8 @@
             background-color: var(--clr-surface-tonal-a20);
 
             font-weight: bold;
-            font-size: 17px;
             color: var(--clr-primary-a20);
-            transition: all 0.15s ease-in-out;
+            transition: all 0.05s ease-in-out;
 
             img {
                 scale: 1.2;
