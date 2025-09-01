@@ -11,14 +11,16 @@ export function handleKeyboardEvent(
     showPopup: boolean, setShowPopup: React.Dispatch<React.SetStateAction<boolean>>,
     isFirstArrowKeyInputRef: React.MutableRefObject<boolean>, data: MediaPreview[] | undefined,
     selectPreviewItem: (item: MediaPreview) => void,
-    keyboardItemSelectCss: string
+    keyboardItemSelectCss: string,
+    resetPopUp: () => void
 ) {
     if (['Enter', 'ArrowDown', 'Tab', 'ArrowUp'].includes(e.key)) {
         const recommendationListItems = document.querySelectorAll('.listGroupItem');
         
+        // TODO: Sometimes cant press enter even tho selected :/ Stress test a bit.
         // in case enter is pressed before api has returned data (it executes default form submit after this)
         if (e.key === 'Enter' && recommendationListItems.length === 0) {
-            setShowPopup(false);
+            resetPopUp();
             return;
         }
 
@@ -30,6 +32,7 @@ export function handleKeyboardEvent(
                 e.preventDefault();
                 if (!data) return;
                 selectPreviewItem(data[selectedRecommendationItem]);
+                //resetPopUp();
                 break;
 
             case 'ArrowDown':

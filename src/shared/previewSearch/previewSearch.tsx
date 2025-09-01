@@ -52,7 +52,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     }
 
     function handleKeyboardEventWrapper(e: React.KeyboardEvent<HTMLInputElement>) {
-        handleKeyboardEvent(e, showPopup, setShowPopup, isFirstArrowKeyInputRef, data, selectPreviewItem, keyboardItemSelectCss);
+        handleKeyboardEvent(e, showPopup, setShowPopup, isFirstArrowKeyInputRef, data, selectPreviewItem, keyboardItemSelectCss, resetPopUp);
     }
 
     // to remove popup on click outside
