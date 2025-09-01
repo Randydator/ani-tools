@@ -34,7 +34,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     const onInputChange = () => {
         // here code that runs after debounce
         setSearchCompleted(true);
-        console.log("State value:", searchTerm);
     };
     const debouncedOnChange = useDebounce(onInputChange);
 
@@ -82,9 +81,11 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                 value={searchTerm}
                 onChange={e => {
                     debouncedOnChange();
-                    setSearchTerm(e.target.value)
+                    setSearchTerm(e.target.value);
+                    setShowPopup(true);  // Show popup when typing new text
                 }}
                 onClick={onSearchboxClick}
+                onFocus={() => setShowPopup(true)}
                 onKeyDown={handleKeyboardEventWrapper}
                 autoComplete="off"
             />

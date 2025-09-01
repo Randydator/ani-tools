@@ -13,9 +13,15 @@ export function handleKeyboardEvent(
     selectPreviewItem: (item: MediaPreview) => void,
     keyboardItemSelectCss: string
 ) {
-    // Only run querySelectorAll for relevant keys
     if (['Enter', 'ArrowDown', 'Tab', 'ArrowUp'].includes(e.key)) {
         const recommendationListItems = document.querySelectorAll('.listGroupItem');
+        
+        // in case enter is pressed before api has returned data (it executes default form submit after this)
+        if (e.key === 'Enter' && recommendationListItems.length === 0) {
+            setShowPopup(false);
+            return;
+        }
+
         if (recommendationListItems.length === 0) return;
         if (!showPopup) setShowPopup(true);
 
