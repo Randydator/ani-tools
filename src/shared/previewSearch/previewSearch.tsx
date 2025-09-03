@@ -12,6 +12,10 @@ type PreviewSearchProps = {
     onPreviewClicked?: (item: any) => void
 }
 
+// BIG TODO: Activity Search right now has type Anime hard coded but it should be dynamic based on what user selects
+// TODO: API request caches only for input string, not type. So if you search for an anime, then manga with same name, it uses cache and returns anime. Low prio as its not a big issue.
+// TODO: Preview image is always anime image, even if manga is searched. Low prio as its not a big issue.
+
 function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
     const [searchTerm, setSearchTerm] = useState('')
     const [searchCompleted, setSearchCompleted] = useState(false);
