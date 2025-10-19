@@ -15,8 +15,13 @@ function ActivitySearch() {
   const user = useContext(UserContext)
 
   const [variables, setVariables] = useState({})
+  const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
   const { isLoading, error, data } = useActivitySearch(variables)
-  
+
+  function handleMediaTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setMediaType(event.target.value as MediaType)
+  }
+
   const submitFunction = (event: any) => {
     event.preventDefault()
     // get all Form data, sanatize it and put it into an object
@@ -55,7 +60,7 @@ function ActivitySearch() {
             <Form.Label>Title:</Form.Label>
             <PreviewSearch
               name="title"
-              type={MediaType.ANIME}
+              type={mediaType}
               placeholder="Title of anime or manga"
               required
               className="aniInput"
@@ -63,14 +68,14 @@ function ActivitySearch() {
           </FormGroup>
         </div>
 
-        <FormGroup controlId="typeSelect">
+        <FormGroup controlId="typeSelect" onChange={handleMediaTypeChange}>
           <Form.Label>Type:</Form.Label>
           <div className="aniRadioButtons">
             <Form.Check
               type="radio"
               label={<label htmlFor="animeType">Anime</label>}
               name="type"
-              value="ANIME"
+              value={MediaType.ANIME}
               defaultChecked
               id="animeType"
             />
@@ -78,7 +83,7 @@ function ActivitySearch() {
               type="radio"
               label={<label htmlFor="mangaType">Manga</label>}
               name="type"
-              value="MANGA"
+              value={MediaType.MANGA}
               id="mangaType"
             />
           </div>

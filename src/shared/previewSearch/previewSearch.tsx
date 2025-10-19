@@ -12,9 +12,7 @@ type PreviewSearchProps = {
     onPreviewClicked?: (item: any) => void
 }
 
-// BIG TODO: Activity Search right now has type Anime hard coded but it should be dynamic based on what user selects
-// TODO: API request caches only for input string, not type. So if you search for an anime, then manga with same name, it uses cache and returns anime. Low prio as its not a big issue.
-// TODO: Preview image is always anime image, even if manga is searched. Low prio as its not a big issue.
+// Search string with anime type. Enter to send search. Then switch type to manga. Then focus on the previewInput. It only executes "showPopup" but with key manga, there is nothing loaded, so no preview seen until input change
 
 function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
     const [searchTerm, setSearchTerm] = useState('')
@@ -40,10 +38,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
         setSearchCompleted(true);
     };
     const debouncedOnChange = useDebounce(onInputChange);
-
-    const onSearchboxClick = () => {
-        setShowPopup(true);
-    }
 
     function selectPreviewItem(item: MediaPreview) {
         setSearchTerm(item.title.userPreferred)
@@ -88,7 +82,6 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                     setSearchTerm(e.target.value);
                     setShowPopup(true);  // Show popup when typing new text
                 }}
-                onClick={onSearchboxClick}
                 onFocus={() => setShowPopup(true)}
                 onKeyDown={handleKeyboardEventWrapper}
                 autoComplete="off"
