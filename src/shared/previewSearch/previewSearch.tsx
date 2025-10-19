@@ -12,6 +12,7 @@ type PreviewSearchProps = {
     onPreviewClicked?: (item: any) => void
 }
 
+// TODO: The hover effect can resize the image and scale it, looks wonky. Test case: Kobayashi-san Chi no Maidragon S: Mini Dra
 // Search string with anime type. Enter to send search. Then switch type to manga. Then focus on the previewInput. It only executes "showPopup" but with key manga, there is nothing loaded, so no preview seen until input change
 
 function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
