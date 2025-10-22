@@ -24,33 +24,22 @@
             border: var(--bs-list-group-border-width) solid var(--clr-surface-tonal-a20);
             transition: transform 0.2s ease-in-out;
 
-            &:hover {
-                background-color: var(--clr-surface-tonal-a20);
-
-                font-weight: bold;
-                font-size: 17px;
-                color: var(--clr-primary-a20);
-                transition: all 0.15s ease-in-out;
-
-                img {
-                    scale: 1.1;
-                    transition: all 0.15s ease-in-out;
-                }
+            p {
+                max-width: 75%;
             }
         }
 
-        .keyboardItemSelect {
+        .listGroupItem:hover,
+        .listGroupItem.keyboardItemSelect {
             background-color: var(--clr-surface-tonal-a20);
-
-            font-weight: bold;
             color: var(--clr-primary-a20);
             transition: all 0.05s ease-in-out;
+        }
 
-            img {
-                scale: 1.2;
-                transition: all 0.15s ease-in-out;
-            }
+        .listGroupItem:hover img,
+        .listGroupItem.keyboardItemSelect img {
+            transform: scale(1.13);
+            transition: transform 0.15s ease-in-out;
         }
     }
-
 }

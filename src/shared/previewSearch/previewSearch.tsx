@@ -12,8 +12,8 @@ type PreviewSearchProps = {
     onPreviewClicked?: (item: any) => void
 }
 
-// TODO: The hover effect can resize the image and scale it, looks wonky. Test case: Kobayashi-san Chi no Maidragon S: Mini Dra
 // Search string with anime type. Enter to send search. Then switch type to manga. Then focus on the previewInput. It only executes "showPopup" but with key manga, there is nothing loaded, so no preview seen until input change
+// TODO: Clear buttons for mobile? Takes long to delete text
 
 function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
     const [searchTerm, setSearchTerm] = useState('')
@@ -89,10 +89,18 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
             />
 
             <div className='popUp' hidden={!showPopup}>
-                {isLoading && <p>Loading...</p>}
-                {error && (
-                    <p>An error occured. Maybe you are on timeout? Wait for a bit!</p>
-                )}
+                <ListGroup className="listGroup">
+                    {isLoading && (
+                        <ListGroupItem className="listGroupItem">
+                            <p>Loading...</p>
+                        </ListGroupItem>
+                    )}
+                    {error && (
+                        <ListGroupItem className="listGroupItem">
+                            <p>Error: {error.message}</p>
+                        </ListGroupItem>
+                    )}
+                </ListGroup>
                 {data && (
                     <ListGroup className="listGroup">
                         {data.map((item, index) => (

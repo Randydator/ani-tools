@@ -95,7 +95,15 @@ function ActivitySearch() {
       </Form>
 
       <div>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && (
+          <Card className='activityCard'>
+            <Card.Body>
+              <Card.Title>
+                <p>Loading...</p>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        )}
         {error && (
           <Card className='activityCard'>
             <Card.Body>
