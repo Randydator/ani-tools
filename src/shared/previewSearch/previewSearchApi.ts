@@ -8,8 +8,7 @@ export const usePreviewSearch = (variables: { searchTerm: string; type: MediaTyp
         queryKey: ['previewSearch', variables],
         queryFn: async () => {
             if (variables.searchTerm.trim() === "") return []
-
-            console.debug('Fetching preview search data with variables:', variables)
+            
             const rawPreviewData =  await fetchFromAnilist(querySearchMediaPreview, variables)
             const previewData: MediaPreview[] = rawPreviewData.Page.media
             return previewData

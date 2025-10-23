@@ -19,7 +19,6 @@ export function handleKeyboardEvent(
         if (e.key === 'Enter' && recommendationListItems.length === 0) {
             resetPopUp();
             selectedRecommendationItem = 0;
-            console.info('Enter normal function case, no recommendation items');
             return;
         }
 
@@ -30,9 +29,7 @@ export function handleKeyboardEvent(
             case 'Enter':
                 e.preventDefault();
                 if (!data) return;
-                console.debug('Enter selecting item case', selectedRecommendationItem, data[selectedRecommendationItem]);
                 selectPreviewItem(data[selectedRecommendationItem]);
-                //resetPopUp();
                 break;
 
             case 'ArrowDown':
