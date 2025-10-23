@@ -3,15 +3,9 @@ import { useContext } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../Header/UserContext';
-import PreviewSearch from '../../shared/previewSearch/previewSearch';
-import { MediaPreview, MediaType } from '../../utils/anilistInterfaces';
 
 function Home() {
     const user = useContext(UserContext)
-
-    function log(item: MediaPreview) {
-        console.log(item.id)
-    }
 
     return (
         <div className="homeBody">

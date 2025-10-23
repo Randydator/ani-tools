@@ -55,7 +55,7 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
     // when mediaType changes but searchTerm is same, we want to re-run the search
     useEffect(() => {
         debouncedOnChange();
-    }, [mediaType]);
+    }, [mediaType, debouncedOnChange]);
 
     // to remove popup on click outside
     useEffect(() => {
