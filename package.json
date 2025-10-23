@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .ts,.tsx",
     "preview": "bun build && wrangler pages dev ./dist",
     "deploy": "bun build && wrangler pages deploy ./dist"
   },

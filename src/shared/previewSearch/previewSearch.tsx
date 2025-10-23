@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { FormControl, ListGroup, ListGroupItem, Image } from 'react-bootstrap'
+import { FormControl, ListGroup, ListGroupItem, Image, Button } from 'react-bootstrap'
 import { usePreviewSearch } from './previewSearchApi'
 import { MediaType, MediaPreview } from '../../utils/anilistInterfaces';
 import './previewSearch.css'
 import DomPurify from "dompurify"
 import useDebounce from './useDebounce';
 import { handleKeyboardEvent } from './previewSearchKeyboardHandler';
+import { FaTimes } from 'react-icons/fa';
 
 type PreviewSearchProps = {
     type: MediaType,
@@ -83,10 +84,25 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
                     setSearchTerm(e.target.value);
                     setShowPopup(true);  // Show popup when typing new text
                 }}
+                onClick={() => setShowPopup(true)} // For when you type, press enter before preview and then click on it again
                 onFocus={() => setShowPopup(true)}
                 onKeyDown={handleKeyboardEventWrapper}
                 autoComplete="off"
             />
+
+            {searchTerm && (
+                <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => {
+                        setSearchTerm('');
+                        setShowPopup(false);
+                    }}
+                    className="clearButton"
+                >
+                    <FaTimes />
+                </Button>
+            )}
 
             <div className='popUp' hidden={!showPopup}>
                 <ListGroup className="listGroup">

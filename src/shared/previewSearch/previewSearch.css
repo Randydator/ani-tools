@@ -42,4 +42,21 @@
             transition: transform 0.15s ease-in-out;
         }
     }
+
+    .clearButton {
+        position: absolute;
+        right: 0.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        padding: 0.25rem 0.5rem;
+        z-index: 2;
+        color: var(--clr-surface-a30);
+
+        &:hover {
+            cursor: pointer;
+            background-color: transparent;
+            color: var(--clr-surface-a30);
+        }
+    }
 }
