@@ -14,7 +14,6 @@ type PreviewSearchProps = {
 }
 
 // Search string with anime type. Enter to send search. Then switch type to manga. Then focus on the previewInput. It only executes "showPopup" but with key manga, there is nothing loaded, so no preview seen until input change
-// TODO: Clear buttons for mobile? Takes long to delete text
 
 function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
     const [searchTerm, setSearchTerm] = useState('')

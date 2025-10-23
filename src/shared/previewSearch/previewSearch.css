@@ -52,6 +52,9 @@
         padding: 0.25rem 0.5rem;
         z-index: 2;
         color: var(--clr-surface-a30);
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        border-radius: 0.25rem;
 
         &:hover {
             cursor: pointer;
