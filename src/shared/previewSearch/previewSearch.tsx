@@ -9,13 +9,11 @@ import { handleKeyboardEvent } from './previewSearchKeyboardHandler';
 import { FaTimes } from 'react-icons/fa';
 
 type PreviewSearchProps = {
-    type: MediaType,
+    mediaType: MediaType,
     onPreviewClicked?: (item: any) => void
 }
 
-// Search string with anime type. Enter to send search. Then switch type to manga. Then focus on the previewInput. It only executes "showPopup" but with key manga, there is nothing loaded, so no preview seen until input change
-
-function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
+function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
     const [searchTerm, setSearchTerm] = useState('')
     const [searchCompleted, setSearchCompleted] = useState(false);
     const [showPopup, setShowPopup] = useState(true);
@@ -23,7 +21,7 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
     const keyboardItemSelectCss = 'keyboardItemSelect';
     const isFirstArrowKeyInputRef = useRef(true); // when popup resets, the first arrow key press should always go to first item
 
-    const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm.trim()), type: type }, searchCompleted)
+    const { isLoading, error, data } = usePreviewSearch({ searchTerm: DomPurify.sanitize(searchTerm.trim()), type: mediaType }, searchCompleted)
 
     const resetPopUp = useCallback(() => {
         setShowPopup(false);
@@ -54,6 +52,11 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
         handleKeyboardEvent(e, showPopup, setShowPopup, isFirstArrowKeyInputRef, data, selectPreviewItem, keyboardItemSelectCss, resetPopUp);
     }
 
+    // when mediaType changes but searchTerm is same, we want to re-run the search
+    useEffect(() => {
+        debouncedOnChange();
+    }, [mediaType]);
+
     // to remove popup on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -68,7 +71,8 @@ function PreviewSearch({ type, onPreviewClicked, ...props }: PreviewSearchProps 
         };
     }, [resetPopUp]);
 
-    // to set searchCompleted to false again after search
+    // to set searchCompleted to false again after search.
+    // Note: When data already present and searchTerm changes, this gets set to false, then after debounce time to true again to trigger new search, then false again when new data arrives
     useEffect(() => {
         setSearchCompleted(false);
     }, [data]);

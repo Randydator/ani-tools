@@ -60,7 +60,7 @@ function ActivitySearch() {
             <Form.Label>Title:</Form.Label>
             <PreviewSearch
               name="title"
-              type={mediaType}
+              mediaType={mediaType}
               placeholder="Title of anime or manga"
               required
               className="aniInput"

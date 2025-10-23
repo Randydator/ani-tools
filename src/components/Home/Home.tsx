@@ -36,10 +36,6 @@ function Home() {
                     </Card.Body>
                 </Card>
             </Link>
-
-            <div style={{width: '30em'}}>
-                <PreviewSearch type={MediaType.ANIME} onPreviewClicked={log}/>
-            </div>
         </div>
     );
 }
