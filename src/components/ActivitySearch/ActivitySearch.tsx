@@ -1,18 +1,16 @@
-import { useState, useContext } from "react"
-import { Form, FormGroup, Button, OverlayTrigger, Tooltip } from "react-bootstrap"
+import { useState } from "react"
+import { Form, FormGroup, Button} from "react-bootstrap"
 import DomPurify from "dompurify"
 import { Card } from "react-bootstrap"
 
 import './activitySearch.css'
-import { UserContext } from "../Header/UserContext"
 import { useActivitySearch } from "./activitySearchApi"
 import ActivityCard from "./ActivityCard/ActivityCard"
-import { FaQuestionCircle } from "react-icons/fa"
 import PreviewSearch from "../../shared/previewSearch/previewSearch"
 import { MediaType } from "../../utils/anilistInterfaces"
+import UserNameInput from "../../shared/userNameInput/usernameInput"
 
 function ActivitySearch() {
-  const user = useContext(UserContext)
 
   const [variables, setVariables] = useState({})
   const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
@@ -33,27 +31,7 @@ function ActivitySearch() {
     <div className="formContainer">
       <Form className="aniForm" onSubmit={submitFunction} id="activitySearchForm">
 
-        <FormGroup controlId="usernameInput">
-          <div className="iconLabel">
-            <Form.Label>User: </Form.Label>
-            <Form.Label style={{ flex: 1 }} />
-            <OverlayTrigger
-              placement="top"
-              overlay={
-                <Tooltip>
-                  Leaving this empty will search for your activities.
-                </Tooltip>
-              }
-            >
-              <Form.Label>
-                <FaQuestionCircle className="icon" />
-              </Form.Label>
-            </OverlayTrigger>
-          </div>
-
-          <Form.Control name="username" type="text" placeholder={user?.username || ""} required={!user?.username} className="aniInput">
-          </Form.Control>
-        </FormGroup>
+        <UserNameInput />
 
         <div className="titleInput">
           <FormGroup controlId="animeTitleInput">
