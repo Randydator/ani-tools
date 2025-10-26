@@ -1,11 +1,11 @@
-import { ActivityCardData, ActivityCardEntries } from '../activitySearchInterfaces'
+import { ActivityCardData, ActivityCardEntries } from '../../../utils/anilistInterfaces'
 import './activityCard.css'
 
 import { Card } from 'react-bootstrap'
 
+// TODO: Use userPreferred for title here as well
+
 function ActivityCard(activities: ActivityCardData) {
-    console.log("card", activities)
-    // TODO: type any here is bad but I'm too lazy to do it properly right now
     const animeTitle = activities.activities.animeTitle
     const activityList: ActivityCardEntries[] = activities.activities.Page.activities
 

@@ -3,28 +3,35 @@ import { Form, FormGroup, Button, OverlayTrigger, Tooltip } from "react-bootstra
 import DomPurify from "dompurify"
 import { Card } from "react-bootstrap"
 
+import './activitySearch.css'
 import { UserContext } from "../Header/UserContext"
 import { useActivitySearch } from "./activitySearchApi"
-import './activitySearch.css'
 import ActivityCard from "./ActivityCard/ActivityCard"
 import { FaQuestionCircle } from "react-icons/fa"
+import PreviewSearch from "../../shared/previewSearch/previewSearch"
+import { MediaType } from "../../utils/anilistInterfaces"
 
 function ActivitySearch() {
   const user = useContext(UserContext)
 
   const [variables, setVariables] = useState({})
+  const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
   const { isLoading, error, data } = useActivitySearch(variables)
+
+  function handleMediaTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setMediaType(event.target.value as MediaType)
+  }
 
   const submitFunction = (event: any) => {
     event.preventDefault()
     // get all Form data, sanatize it and put it into an object
-    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString())]))
+    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString().trim())]))
     setVariables(searchPayload)
   }
 
   return (
     <div className="formContainer">
-      <Form className="aniForm" onSubmit={submitFunction}>
+      <Form className="aniForm" onSubmit={submitFunction} id="activitySearchForm">
 
         <FormGroup controlId="usernameInput">
           <div className="iconLabel">
@@ -48,20 +55,27 @@ function ActivitySearch() {
           </Form.Control>
         </FormGroup>
 
-        <FormGroup controlId="animeTitleInput">
-          <Form.Label>Title:</Form.Label>
-          <Form.Control name="title" type="text" placeholder="Title of anime or manga" required className="aniInput">
-          </Form.Control>
-        </FormGroup>
+        <div className="titleInput">
+          <FormGroup controlId="animeTitleInput">
+            <Form.Label>Title:</Form.Label>
+            <PreviewSearch
+              name="title"
+              mediaType={mediaType}
+              placeholder="Title of anime or manga"
+              required
+              className="aniInput"
+            />
+          </FormGroup>
+        </div>
 
-        <FormGroup controlId="typeSelect">
+        <FormGroup controlId="typeSelect" onChange={handleMediaTypeChange}>
           <Form.Label>Type:</Form.Label>
           <div className="aniRadioButtons">
             <Form.Check
               type="radio"
               label={<label htmlFor="animeType">Anime</label>}
               name="type"
-              value="ANIME"
+              value={MediaType.ANIME}
               defaultChecked
               id="animeType"
             />
@@ -69,19 +83,27 @@ function ActivitySearch() {
               type="radio"
               label={<label htmlFor="mangaType">Manga</label>}
               name="type"
-              value="MANGA"
+              value={MediaType.MANGA}
               id="mangaType"
             />
           </div>
         </FormGroup>
 
-        <Button type="submit" className="aniSubmitButton" style={{border: 'none'}}>
+        <Button type="submit" className="aniSubmitButton" style={{ border: 'none' }}>
           Search
         </Button>
       </Form>
 
       <div>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && (
+          <Card className='activityCard'>
+            <Card.Body>
+              <Card.Title>
+                <p>Loading...</p>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        )}
         {error && (
           <Card className='activityCard'>
             <Card.Body>

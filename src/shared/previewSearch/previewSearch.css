@@ -1,0 +1,65 @@
+.previewSearch {
+    position: relative;
+
+    .popUp {
+        position: absolute;
+        top: 100%;
+        z-index: 1;
+        max-height: 20em;
+        overflow-y: scroll;
+        border-radius: 0.5em;
+        width: 100%;
+        margin-top: 0.4em;
+    }
+
+    .listGroup {
+        overflow: hidden;
+
+        .listGroupItem {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            background-color: var(--clr-surface-a10);
+            border: var(--bs-list-group-border-width) solid var(--clr-surface-tonal-a20);
+            transition: transform 0.2s ease-in-out;
+
+            p {
+                max-width: 75%;
+            }
+        }
+
+        .listGroupItem:hover,
+        .listGroupItem.keyboardItemSelect {
+            background-color: var(--clr-surface-tonal-a20);
+            color: var(--clr-primary-a20);
+            transition: all 0.05s ease-in-out;
+        }
+
+        .listGroupItem:hover img,
+        .listGroupItem.keyboardItemSelect img {
+            transform: scale(1.13);
+            transition: transform 0.15s ease-in-out;
+        }
+    }
+
+    .clearButton {
+        position: absolute;
+        right: 0.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        padding: 0.25rem 0.5rem;
+        z-index: 2;
+        color: var(--clr-surface-a30);
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        border-radius: 0.25rem;
+
+        &:hover {
+            cursor: pointer;
+            background-color: transparent;
+            color: var(--clr-surface-a30);
+        }
+    }
+}

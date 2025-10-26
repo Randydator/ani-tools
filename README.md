@@ -4,8 +4,8 @@ Feel free to suggest tool ideas in github issues!
 
 ## Use locally: 
 ```
-npm i
-npm run dev
+bun i
+bun dev
 ```
 The Login won't work locally because the redirect url is set to the production url. 
 To login locally, simulate a login by going providing the oauthCallback a token. 
