@@ -15,8 +15,10 @@ export function handleKeyboardEvent(
     if (['Enter', 'ArrowDown', 'Tab', 'ArrowUp'].includes(e.key)) {
         const recommendationListItems = document.querySelectorAll('.listGroupItem');
 
-        // in case enter is pressed before api has returned data (it executes default form submit after this)
-        if (e.key === 'Enter' && recommendationListItems.length === 0) {
+        // If enter is pressed and there are no preview items (meaning preview is closed, search term is filled)
+        // Or in case enter is pressed before api has returned data (it executes default form submit after this)
+        // Or if the popup is not visible (meaning we're trying to submit the form)
+        if (e.key === 'Enter' && (!showPopup || recommendationListItems.length === 0)) {
             resetPopUp();
             selectedRecommendationItem = 0;
             return;
