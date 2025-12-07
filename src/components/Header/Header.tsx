@@ -1,6 +1,6 @@
 import './header.css';
 import { useState, useEffect, useRef } from 'react';
-import { Container, Button, Row, Col, Image, Dropdown } from 'react-bootstrap';
+import { Container, Button, Image, Dropdown } from 'react-bootstrap';
 import { FaUser, FaGithub } from 'react-icons/fa';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { login } from './authenticate';
