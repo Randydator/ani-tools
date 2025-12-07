@@ -12,6 +12,74 @@
     color: var(--clr-primary-a20);
 }
 
+.header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
 .avatar {
     height: 3.5rem;
+    width: 3.5rem;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 50%;
+    background: var(--clr-primary-a20, #6c757d);
+    color: white;
+}
+
+/* smaller screens */
+@media (max-width: 576px) {
+    .brand h1 { font-size: 1.3rem; }
+    .avatar, .avatar-fallback { height: 2.4rem; width: 2.4rem; }
+}
+
+/* Themed dropdown menu */
+.header-dropdown-menu {
+    background: var(--clr-surface-a10);
+    border: none;
+    padding: 0.25rem 0;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.35);
+}
+
+.header-dropdown-menu .dropdown-item {
+    color: var(--clr-primary-a50);
+    background: transparent;
+}
+
+/* hover/active state matches card hover tonal surface and primary accent */
+.header-dropdown-menu .dropdown-item:hover,
+.header-dropdown-menu .dropdown-item:focus,
+.header-dropdown-menu .dropdown-item.active {
+    background: var(--clr-surface-tonal-a10);
+    color: var(--clr-primary-a30);
+}
+
+/* make toggle (avatar) not show default focus ring removal from bootstrap but keep visible outline */
+.avatar-toggle {
+    display: inline-flex;
+    align-items: center;
+}
+
+.avatar-toggle:focus {
+    outline: 2px solid rgba(255,255,255,0.12);
+    outline-offset: 2px;
 }

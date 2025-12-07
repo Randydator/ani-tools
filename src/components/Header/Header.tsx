@@ -1,8 +1,8 @@
 import './header.css';
-import { useState, useEffect } from 'react';
-import { Container, Button, Row, Col, Image } from 'react-bootstrap';
-import { FaUser, FaRegTrashAlt } from 'react-icons/fa';
-import { Link, Outlet } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Container, Button, Row, Col, Image, Dropdown } from 'react-bootstrap';
+import { FaUser } from 'react-icons/fa';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { login } from './authenticate';
 import Cookies from 'js-cookie';
 import { UserContext, User } from './UserContext';
@@ -20,6 +20,10 @@ function Header() {
     };
     // initialize as empty User, then runs useEffect again when cookie is there to set user
     const [user, setUser] = useState(emptyUser);
+    const location = useLocation();
+    const [title, setTitle] = useState('AniTools');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const hideTimeoutRef = useRef<number | null>(null);
 
     // Setting a cookie is asynchronous, so after the redirect, the cookie isn't set yet. 
     // useEffect here runs once after the component is mounted. By that time the cookie is set.
@@ -45,6 +49,27 @@ function Header() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const pathname = location.pathname || '/';
+        const getTitleFromPath = (p: string) => {
+            if (p === '/' || p === '') return 'AniTools';
+            if (p.startsWith('/AniLike')) return 'AniLike';
+            if (p.startsWith('/ActivitySearch')) return 'Activity Search';
+            if (p.startsWith('/OauthCallback') || p.startsWith('/oauthCallback')) return 'Callback';
+            return 'AniTools';
+        }
+        setTitle(getTitleFromPath(pathname));
+    }, [location]);
+
+    useEffect(() => {
+        return () => {
+            if (hideTimeoutRef.current) {
+                clearTimeout(hideTimeoutRef.current);
+                hideTimeoutRef.current = null;
+            }
+        };
+    }, []);
+
     function clearCookies() {
         Object.keys(Cookies.get()).forEach(cookieName => {
             Cookies.remove(cookieName);
@@ -54,35 +79,67 @@ function Header() {
 
     return <>
         <Container fluid className='header'>
-            <Row className="justify-content-md-center">
-                <Col xs={2}>
-                    <div className="d-flex justify-content-center">
-                        <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={clearCookies}>
-                            <FaRegTrashAlt className="me-1" />
-                            Clear cookies
-                        </Button>
-                    </div>
-                </Col>
-                <Col xs={8}>
+            <div className="header-flex">
+                <div className="brand">
                     <Link to={"/"} className='text-decoration-none'>
-                        <h1 className='text'>AniTools</h1>
+                        <h1 className='text'>{title}</h1>
                     </Link>
-                </Col>
-                <Col xs={2}>
-                    <div className="d-flex justify-content-center">
-                        {user.username === undefined ?
-                            <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login}>
-                                <FaUser className="me-1" />
-                                Login
-                            </Button>
-                            :
-                            <a href={user.siteUrl} target="_blank" rel="noopener noreferrer" className="d-flex align-items-center">
-                                <Image src={user.avatar.medium} alt="Avatar" roundedCircle className='avatar' />
-                            </a>
-                        }
-                    </div>
-                </Col>
-            </Row>
+                </div>
+
+                <div className="actions d-flex align-items-center">
+                    {user.username === undefined ? (
+                        <Button variant="link" className="p-0 border-0 text-decoration-none login" onClick={login}>
+                            <FaUser className="me-1" />
+                            Login
+                        </Button>
+                    ) : (
+                        // hoverable dropdown: we control show state so it opens on hover and stays open
+                        <div
+                            onMouseEnter={() => {
+                                if (hideTimeoutRef.current) {
+                                    clearTimeout(hideTimeoutRef.current);
+                                    hideTimeoutRef.current = null;
+                                }
+                                setShowDropdown(true);
+                            }}
+                            onMouseLeave={() => {
+                                if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+                                hideTimeoutRef.current = window.setTimeout(() => {
+                                    setShowDropdown(false);
+                                    hideTimeoutRef.current = null;
+                                }, 250);
+                            }}
+                        >
+                            <Dropdown align="end" show={showDropdown} onToggle={(nextShow) => setShowDropdown(nextShow)}>
+                                <Dropdown.Toggle variant="link" className="p-0 border-0 avatar-toggle" id="avatar-dropdown" aria-haspopup="true" aria-expanded={showDropdown}>
+                                    {user.avatar.medium ? (
+                                        <Image src={user.avatar.medium} alt="Avatar" roundedCircle className='avatar' />
+                                    ) : (
+                                        <div className="avatar-fallback" aria-hidden="true"><FaUser /></div>
+                                    )}
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu className="header-dropdown-menu" onMouseEnter={() => {
+                                    if (hideTimeoutRef.current) {
+                                        clearTimeout(hideTimeoutRef.current);
+                                        hideTimeoutRef.current = null;
+                                    }
+                                    setShowDropdown(true);
+                                }} onMouseLeave={() => {
+                                    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+                                    hideTimeoutRef.current = window.setTimeout(() => {
+                                        setShowDropdown(false);
+                                        hideTimeoutRef.current = null;
+                                    }, 250);
+                                }}>
+                                    <Dropdown.Item href={user.siteUrl} target="_blank" rel="noopener noreferrer">Profile</Dropdown.Item>
+                                    <Dropdown.Item onClick={clearCookies}>Logout</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
+                    )}
+                </div>
+            </div>
         </Container>
 
         <main>
