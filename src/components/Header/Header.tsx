@@ -1,7 +1,7 @@
 import './header.css';
 import { useState, useEffect, useRef } from 'react';
 import { Container, Button, Row, Col, Image, Dropdown } from 'react-bootstrap';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaGithub } from 'react-icons/fa';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { login } from './authenticate';
 import Cookies from 'js-cookie';
@@ -147,6 +147,10 @@ function Header() {
                 <Outlet />
             </ UserContext.Provider>
         </main>
+
+        <a href="https://github.com/Randydator/ani-tools" target="_blank" rel="noopener noreferrer" className="github-fab" aria-label="ani-tools on GitHub" title="View project on GitHub">
+            <FaGithub />
+        </a>
     </>
 
 }

@@ -83,3 +83,32 @@
     outline: 2px solid rgba(255,255,255,0.12);
     outline-offset: 2px;
 }
+
+/* Floating GitHub FAB */
+.github-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1050;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: var(--clr-surface-a10);
+    color: white;
+    box-shadow: 0 0.6rem 1rem rgba(0,0,0,0.35);
+    text-decoration: none;
+    transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.github-fab:hover,
+.github-fab:focus {
+    transform: translateY(-3px) scale(1.03);
+    background: var(--clr-surface-tonal-a10);
+}
+
+@media (max-width: 576px) {
+    .github-fab { right: 0.6rem; bottom: 0.6rem; width: 2.6rem; height: 2.6rem; }
+}
