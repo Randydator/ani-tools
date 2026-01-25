@@ -299,7 +299,7 @@ query ($mediaId: Int, $userId: Int){
 `
 
 export const mutationSaveMediaListEntry = `
-mutation($mediaId: Int, $status: String, $progress: Int, $private: Boolean){
+mutation($mediaId: Int, $status: MediaListStatus, $progress: Int, $private: Boolean){
   SaveMediaListEntry(mediaId: $mediaId, status: $status, progress: $progress, private: $private) {
     status,
     repeat,

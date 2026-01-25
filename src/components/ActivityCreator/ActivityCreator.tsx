@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Button, FormControl, InputGroup, Card } from 'react-bootstrap';
 import PreviewSearch from '../../shared/previewSearch/previewSearch';
-import { MediaStatus, MediaType, MediaPreview } from '../../utils/anilistInterfaces';
+import { MediaStatus, MediaType, MediaPreview, ActivityCreatorSearchVariables } from '../../utils/anilistInterfaces';
 import './activityCreator.css'
 import DomPurify from "dompurify"
 import { useActivityCreator } from './activityCreatorApi';
@@ -9,10 +9,15 @@ import { useActivityCreator } from './activityCreatorApi';
 function ActivityCreator() {
   const [progress, setProgress] = useState<number | string>('');
   const [status, setStatus] = useState<string>('');
-  const [selectedMediaMaxProgress, setSelectedMediaMaxProgress] = useState<number | null>(null);
+  const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
 
-  const [variables, setVariables] = useState({})
-  const { isLoading, error, data } = useActivityCreator(variables)
+  const {
+    mutate,
+    isPending,
+    isError,
+    isSuccess,
+    error
+  } = useActivityCreator();
 
   // Error Messages
   const [titleErrorMsg, setTitleErrorMsg] = useState<string | null>(null);
@@ -22,8 +27,10 @@ function ActivityCreator() {
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
     const titleValue = formData.get("title");
+    const media = selectedMediaPreview;
+    const progressValue = Number(progress);
 
     let hasError = false;
 
@@ -39,27 +46,40 @@ function ActivityCreator() {
       hasError = true;
     }
 
-    if (status === MediaStatus.PLANNING && progress) {
+    if (!media || !media.type) {
+      setTitleErrorMsg("Please select a media");
+      // return bcs typescript doesn't understand that it is defined below
+      return;
+    }
+
+    if (status === MediaStatus.PLANNING && progressValue) {
       setProgressErrorMsg("Cannot set progress when planning an anime");
       hasError = true;
     }
 
-    if (status !== MediaStatus.PLANNING && !progress) {
+    if (status !== MediaStatus.PLANNING && !progressValue) {
       setProgressErrorMsg("Won't create an activity");
+      hasError = true;
+    }
+
+    if (status === MediaStatus.COMPLETED && progressValue < (media.episodes ?? media.chapters ?? 0)) {
+      setProgressErrorMsg(`Set to final progress count (${media.episodes ?? media.chapters ?? 0})`);
       hasError = true;
     }
 
     if (hasError) return;
 
-    const searchPayload = Object.fromEntries(
-      Array.from(formData.entries()).map(([key, value]) => [
-        key,
-        DomPurify.sanitize(value.toString().trim())
-      ])
-    );
-    
-    console.log("Payload:", searchPayload);
-    setVariables(searchPayload)
+    const mutationVariables: ActivityCreatorSearchVariables = {
+      title: DomPurify.sanitize(titleValue?.toString().trim() || ""),
+      status: status as MediaStatus,
+      progress: Number(progress),
+      // This is the clean way to handle the boolean from FormData
+      noMerge: formData.has("noMerge"),
+      type: media.type as MediaType
+    };
+
+    console.log("Payload:", mutationVariables);
+    mutate(mutationVariables);
   };
 
   function handleStatusChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -78,15 +98,15 @@ function ActivityCreator() {
     }
 
     const newProgress = Number(rawValue);
-    const max = selectedMediaMaxProgress ?? 0;
+    const max = (selectedMediaPreview?.episodes ?? selectedMediaPreview?.chapters ?? 20000);
 
     if (newProgress < 0) {
       setProgressErrorMsg("Can't be negative");
       setProgress(0);
-    } else if (selectedMediaMaxProgress !== null && newProgress > max) {
+    } else if (selectedMediaPreview !== null && newProgress > max) {
       setProgressErrorMsg(`Max is ${max}`);
       setProgress(max);
-    } else if (selectedMediaMaxProgress === null && newProgress > 0) {
+    } else if (selectedMediaPreview === null && newProgress > 0) {
       setProgressErrorMsg("Select title first");
       setProgress(0);
     } else {
@@ -100,8 +120,8 @@ function ActivityCreator() {
     setProgress('');
     setProgressErrorMsg(null);
     // Clear title error when a media is finally selected
-    if (selectedMediaMaxProgress !== null) setTitleErrorMsg(null);
-  }, [selectedMediaMaxProgress]);
+    if (selectedMediaPreview !== null) setTitleErrorMsg(null);
+  }, [selectedMediaPreview]);
 
   // Common style to prevent layout shifts
   const absoluteErrorStyle: React.CSSProperties = {
@@ -125,9 +145,9 @@ function ActivityCreator() {
             className={`aniInput ${titleErrorMsg ? 'is-invalid' : ''}`}
             onPreviewClicked={(media: MediaPreview) => {
               if (media) {
-                setSelectedMediaMaxProgress(media.episodes ? media.episodes : media.chapters);
+                setSelectedMediaPreview(media);
               } else {
-                setSelectedMediaMaxProgress(0);
+                setSelectedMediaPreview(null);
               }
             }}
           />
@@ -166,7 +186,7 @@ function ActivityCreator() {
             <FormControl
               name="progress"
               type="number"
-              max={selectedMediaMaxProgress ? selectedMediaMaxProgress + 1 : 1}
+              max={(selectedMediaPreview?.episodes ?? selectedMediaPreview?.chapters ?? 20000) + 1}
               min={-1}
               onChange={handleProgressChange}
               value={progress}
@@ -191,8 +211,13 @@ function ActivityCreator() {
         </Button>
       </Form>
 
+      {/* Button that logs the current selected media */}
+      <Button onClick={() => console.log("Current Selected Media:", selectedMediaPreview)} className="mt-2" style={{ border: 'none', width: '100%' }}>
+        Log Selected Media
+      </Button>
+
       <div>
-        {isLoading && (
+        {isPending && (
           <Card className='activityCard'>
             <Card.Body>
               <Card.Title>
@@ -201,7 +226,7 @@ function ActivityCreator() {
             </Card.Body>
           </Card>
         )}
-        {error && (
+        {isError && (
           <Card className='activityCard'>
             <Card.Body>
               <Card.Title>
@@ -210,7 +235,7 @@ function ActivityCreator() {
             </Card.Body>
           </Card>
         )}
-        {data && (
+        {isSuccess && (
           <Card className='activityCard'>
             <Card.Body>
               <Card.Title>
@@ -220,7 +245,7 @@ function ActivityCreator() {
           </Card>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 

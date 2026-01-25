@@ -40,6 +40,7 @@ export interface MediaPreview {
     type: string;
     episodes: number | null;
     chapters: number | null;
+    progress: number | null;
 }
 
 
@@ -97,6 +98,7 @@ export interface ActivityCreatorSearchVariables {
     status: MediaStatus,
     progress: number | string
     noMerge: Boolean
+    type: MediaType
 }
 
 
