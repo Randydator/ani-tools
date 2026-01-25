@@ -129,6 +129,11 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
                             <ListGroupItem key={index} className="listGroupItem" onClick={() => selectPreviewItem(item)}>
                                 <p>
                                     {DomPurify.sanitize(item.title.userPreferred)}
+                                    {mediaType === "BOTH" && (
+                                        <span className="entryTypeText">
+                                            ({item.type})
+                                        </span>
+                                    )}
                                 </p>
                                 <Image src={DomPurify.sanitize(item.coverImage.medium)} width="50px" height="60px" rounded />
                             </ListGroupItem>

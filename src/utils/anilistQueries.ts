@@ -258,8 +258,49 @@ query ($searchTerm: String, $type: MediaType)
       coverImage {
         medium
       }
-
+      type
     }
+  }
+}
+`
+
+export const querySearchMediaPreviewUntyped = `
+query ($searchTerm: String)
+{
+  Page (perPage: 20) {
+    media (search:$searchTerm) {
+      title {
+        userPreferred
+      }
+      id
+      coverImage {
+        medium
+      }
+      type
+    }
+  }
+}
+`
+
+export const queryMediaListEntryUserStats = `
+query ($mediaId: Int, $userId: Int){
+  MediaList(mediaId: $mediaId, userId: $userId) {
+    private
+    repeat
+    progress
+    status
+  }
+}
+`
+
+export const mutationMarkMediaPrivate = `
+mutation($mediaId: Int, $repeat: Int, $status: String, $progress: Int){
+  SaveMediaListEntry(mediaId: $mediaId, repeat: $repeat, status: $status, progress: $progress) {
+    status,
+    repeat,
+    mediaId,
+    progress,
+    private
   }
 }
 `
