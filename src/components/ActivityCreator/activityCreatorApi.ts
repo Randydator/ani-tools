@@ -9,6 +9,21 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
 
+    /* TODO: 
+        1 request > get current stats (for setting back later)
+        If possible, get rate limit remaining from this request. If not, send rate limit request before. Going over rate limit in the middle very bad. 
+        1 request > get userOptions (merge time)
+
+        Let's say user wants to rewatch episode 9/12 and had it as completed before. 
+        (Optional): Set merge time to never
+        Create activity: private: false; progress: 9, status: repeating, mediaId...
+        Return mediaEntry stats to before in private: private: true, progress: like before; status: like before: mediaId..., repeat: like before
+        1 request > set private to before
+        
+        (Optional): Set merge time to before
+
+        */
+
     return useQuery({
         queryKey: ['activitySearch', variables],
         queryFn: async () => {

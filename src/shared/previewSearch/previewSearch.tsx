@@ -41,7 +41,7 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
     function selectPreviewItem(item: MediaPreview) {
         setSearchTerm(item.title.userPreferred)
         resetPopUp();
-        
+
         // to get previews for newly inserted searchTerm. This kinda doubles API calls, remove if that becomes an issue (because else it just comes back on new input > debounce)
         setSearchCompleted(true);
 
@@ -103,6 +103,9 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
                     onClick={() => {
                         setSearchTerm('');
                         setShowPopup(false);
+                        if (onPreviewClicked) {
+                            onPreviewClicked(null);
+                        }
                     }}
                     className="clearButton"
                 >

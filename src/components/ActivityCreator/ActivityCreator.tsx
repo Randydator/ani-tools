@@ -1,32 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Button, Row, Col, FormControl, InputGroup } from 'react-bootstrap';
 import PreviewSearch from '../../shared/previewSearch/previewSearch';
-import { MediaStatus, MediaType } from '../../utils/anilistInterfaces';
+import { MediaStatus, MediaType, MediaPreview } from '../../utils/anilistInterfaces';
+import './activityCreator.css'
+import DomPurify from "dompurify"
 
 function ActivityCreator() {
   const [mediaTitle, setMediaTitle] = useState('');
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [mediaType, setMediaType] = useState<MediaType>(MediaType.BOTH);
-  const [selectedMedia, setSelectedMedia] = useState<MediaStatus>(MediaStatus);
-
-  // TODO: When media is selected with previewSearch, then also spit out the media entry. Use that to make the episode box a selector from 0 till max episodes / chapters.
-
+  const [selectedMediaMaxProgress, setSelectedMediaMaxProgress] = useState<number | null>(null)
+  const [progressTitleText, setProgressTitleText] = useState<string>('Progress:')
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    // Handle form submission logic here
-    console.log(`Media Title: ${mediaTitle}`);
-    console.log(`Status: ${status}`);
-    console.log(`Progress: ${progress}`);
+    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString().trim())]))
+
   };
+
+  function handleProgressChange(event: React.ChangeEvent<HTMLInputElement>) { 
+    const newProgress = Number(event.target.value);
+    if (newProgress < 0) {
+      setProgressTitleText("Progress: Can't be a negative number")
+      setProgress(0);
+    } else if (selectedMediaMaxProgress && newProgress > selectedMediaMaxProgress){
+      setProgressTitleText("Progress: Can't be higher than max progress")
+      setProgress(selectedMediaMaxProgress);
+    }
+    else if (!selectedMediaMaxProgress && newProgress > 0) {
+      setProgressTitleText("Progress: Select Media title first")
+      setProgress(0);
+    }
+    else {
+      setProgressTitleText("Progress:")
+      setProgress(newProgress);
+    }
+  }
+
+  // MaxProgress was set to 12 through valid anime. MediaSelection changes, so we also need to reset the current input value to 0. (bcs max is now set to 1)
+  useEffect(() => {
+    setProgress(0);
+  }, [selectedMediaMaxProgress])
+
 
   return (
     <div className="formContainer">
-      <Form onSubmit={handleSubmit} id="activityCreatorForm">
+      <Form onSubmit={handleSubmit} className='activityCreatorForm'>
 
         <div className="titleInput">
-          <FormGroup controlId="animeTitleInput">
+          <FormGroup>
             <Form.Label>Title:</Form.Label>
             <PreviewSearch
               name="title"
@@ -34,40 +57,42 @@ function ActivityCreator() {
               placeholder="Title of anime or manga"
               required
               className="aniInput"
-
+              onPreviewClicked={(media: MediaPreview) => {
+                if (media){
+                  setSelectedMediaMaxProgress(media.episodes ? media.episodes : media.chapters)
+                } else {
+                  setSelectedMediaMaxProgress(0)
+                }
+              }}
             />
           </FormGroup>
         </div>
 
-        <Row className="mb-3">
-          <Col md={6}>
-            <FormGroup controlId="statusSelect">
-              <Form.Label>Status:</Form.Label>
-              <FormControl as="select" value={status} onChange={(e) => setStatus(e.target.value)}>
-                <option value="">Select Status</option>
-                <option value={MediaStatus.PLANNING}>Planning</option>
-                <option value={MediaStatus.CURRENT}>Current</option>
-                <option value={MediaStatus.PAUSED}>Paused</option>
-                <option value={MediaStatus.COMPLETED}>Completed</option>
-                <option value={MediaStatus.DROPPED}>Dropped</option>
-                <option value={MediaStatus.REPEATING}>Repeating</option>
-              </FormControl>
-            </FormGroup>
-          </Col>
+        <FormGroup controlId="statusSelect">
+          <Form.Label>Status:</Form.Label>
+          <FormControl as="select" value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="">Select Status</option>
+            <option value={MediaStatus.PLANNING}>Planning</option>
+            <option value={MediaStatus.CURRENT}>Current</option>
+            <option value={MediaStatus.PAUSED}>Paused</option>
+            <option value={MediaStatus.COMPLETED}>Completed</option>
+            <option value={MediaStatus.DROPPED}>Dropped</option>
+            <option value={MediaStatus.REPEATING}>Repeating</option>
+          </FormControl>
+        </FormGroup>
 
-          <Col md={6}>
-            <FormGroup controlId="progressInput">
-              <Form.Label>Progress:</Form.Label>
-              <InputGroup className={progress < 0 ? 'border-danger' : ''}>
-                <FormControl type="number" onChange={(e) => setProgress(Number(e.target.value))} />
-              </InputGroup>
-            </FormGroup>
-          </Col>
-        </Row>
-
+        <FormGroup controlId="progressInput">
+          <Form.Label>{progressTitleText}</Form.Label>
+          <InputGroup className={progress < 0 ? 'border-danger' : ''}>
+            <FormControl type="number" max={selectedMediaMaxProgress ? selectedMediaMaxProgress + 1 : 1} min={-1} onChange={handleProgressChange} value={progress}/>
+          </InputGroup>
+        </FormGroup>
+        
         <Button type="submit" className="aniSubmitButton" style={{ border: 'none' }}>
           Create Activity
         </Button>
+
+<Button onClick={() => console.log(selectedMediaMaxProgress)}>Log Max Progress</Button>
       </Form>
     </div>
   );

@@ -259,6 +259,8 @@ query ($searchTerm: String, $type: MediaType)
         medium
       }
       type
+      episodes
+      chapters
     }
   }
 }
@@ -277,6 +279,8 @@ query ($searchTerm: String)
         medium
       }
       type
+      episodes
+      chapters
     }
   }
 }
@@ -305,6 +309,25 @@ mutation($mediaId: Int, $repeat: Int, $status: String, $progress: Int){
     mediaId,
     progress,
     private
+  }
+}
+`
+export const queryUserOptions = `
+query ($userId: Int) {
+  User(id: $userId){
+    options{
+      activityMergeTime
+    }
+  }
+}
+`
+
+export const mutationUserOptions = `
+mutation ($activityMergeTime:Int) {
+  UpdateUser(
+    activityMergeTime: $activityMergeTime
+  ) {
+    id
   }
 }
 `

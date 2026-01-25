@@ -38,6 +38,8 @@ export interface MediaPreview {
         medium: string;
     };
     type: string;
+    episodes: number | null;
+    chapters: number | null;
 }
 
 
