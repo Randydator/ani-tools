@@ -67,6 +67,11 @@ function ActivityCreator() {
       hasError = true;
     }
 
+    if (status !== MediaStatus.COMPLETED && (media.episodes ?? media.chapters ?? 0) === progressValue) {
+      setProgressErrorMsg(`Set status to completed for final episode ${media.episodes ?? media.chapters ?? 0}`);
+      hasError = true;
+    }
+
     if (hasError) return;
 
     const mutationVariables: ActivityCreatorSearchVariables = {
