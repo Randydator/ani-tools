@@ -1,5 +1,5 @@
 .header {
-    padding: 1rem;
+    padding: 1rem 3rem; /* add more horizontal space from screen edges */
     margin-bottom: 1rem;
 }
 
@@ -12,6 +12,149 @@
     color: var(--clr-primary-a20);
 }
 
+.header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
 .avatar {
     height: 3.5rem;
+    width: 3.5rem;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 50%;
+    background: var(--clr-primary-a20, #6c757d);
+    color: white;
+}
+
+/* smaller screens */
+@media (max-width: 576px) {
+    .brand h1 { font-size: 1.3rem; }
+    .avatar, .avatar-fallback { height: 2.4rem; width: 2.4rem; }
+}
+
+/* Themed dropdown menu */
+.header-dropdown-menu {
+    background: var(--clr-surface-a10);
+    padding: 0.25rem 0;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.35);
+    /* center the dropdown horizontally under the avatar */
+    left: 50% !important;
+    right: auto !important;
+    top: calc(100% + 0.4rem) !important; /* place below the avatar */
+    transform: translateX(-50%) !important;
+    min-width: 9rem;
+    text-align: center;
+    z-index: 1060;
+}
+
+.header-dropdown-menu .dropdown-item {
+    color: var(--clr-primary-a50);
+    background: transparent;
+    padding: 0.6rem 1.2rem; /* more breathing room */
+    margin: 0.15rem 0;
+    border-radius: 0.375rem;
+}
+
+.header-dropdown-menu .dropdown-item {
+    text-align: center;
+}
+
+/* Prevent dropdown from overflowing on smaller screens: align to the right edge when necessary */
+@media (max-width: 768px) {
+    .header { padding: 1rem 2rem; }
+    .header-dropdown-menu {
+        left: auto !important;
+        right: 1rem !important;
+        transform: none !important;
+        min-width: 7.5rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .header { padding: 1rem 1.25rem; }
+    .header-dropdown-menu {
+        right: 0.6rem !important;
+        left: auto !important;
+        transform: none !important;
+        min-width: 7rem;
+    }
+}
+
+/* hover/active state matches card hover tonal surface and primary accent */
+.header-dropdown-menu .dropdown-item:hover,
+.header-dropdown-menu .dropdown-item:focus,
+.header-dropdown-menu .dropdown-item.active {
+    background: var(--clr-surface-tonal-a10);
+    color: var(--clr-primary-a30);
+}
+
+/* make toggle (avatar) not show default focus ring removal from bootstrap but keep visible outline */
+.avatar-toggle {
+    display: inline-flex;
+    align-items: center;
+}
+
+.avatar-toggle:focus {
+    outline: 0.125rem solid rgba(255,255,255,0.12);
+    outline-offset: 0.125rem;
+}
+
+/* Floating GitHub FAB */
+.github-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1050;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: var(--clr-surface-a10);
+    color: white;
+    box-shadow: 0 0.6rem 1rem rgba(0,0,0,0.35);
+    text-decoration: none;
+    transition: transform 0.12s ease, background 0.12s ease;
+}
+
+/* Make any SVG or icon inside the FAB larger and inherit the button's font-size */
+.github-fab svg,
+.github-fab i {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: block;
+}
+
+.github-fab:hover,
+.github-fab:focus {
+    transform: translateY(-0.1875rem) scale(1.03);
+    background: var(--clr-surface-tonal-a10);
+}
+
+@media (max-width: 576px) {
+    .github-fab { right: 0.6rem; bottom: 0.6rem; width: 2.6rem; height: 2.6rem; font-size: 1.05rem; }
+    .github-fab svg,
+    .github-fab i { width: 1.2rem; height: 1.2rem; }
 }

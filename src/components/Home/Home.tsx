@@ -30,6 +30,17 @@ function Home() {
                     </Card.Body>
                 </Card>
             </Link>
+
+            <Link to="/ActivityCreator" className="p-0 border-0 text-decoration-none" style={{pointerEvents: user?.token === undefined ? 'none' : 'auto', opacity: user?.token === undefined ? 0.5 : 1}}>
+                <Card className='home-card'>
+                    <Card.Body>
+                        <Card.Title>Activity Creator{user?.token === undefined ? ' - LOGIN REQUIRED' : ''}</Card.Title>
+                        <Card.Text>
+                            Force AniList to create a specific activity.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            </Link>
         </div>
     );
 }

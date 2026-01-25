@@ -15,6 +15,7 @@ import AniLike from "./components/AniLike/AniLike";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import ActivitySearch from './components/ActivitySearch/ActivitySearch'
 import OauthCallback from './components/oauthCallback/OauthCallback'
+import ActivityCreator from './components/ActivityCreator/ActivityCreator'
 
 
 const queryClient = new QueryClient();
@@ -24,9 +25,10 @@ const router = createBrowserRouter(
     <Route path="/" element={<Header />}>
       <Route index element={<Home />} />
       <Route path="AniLike" element={<AniLike />} />
-      <Route path="*" element={<NotFoundPage />} />
       <Route path="ActivitySearch" element={<ActivitySearch />} />
       <Route path="oauthCallback" element={<OauthCallback />} />
+      <Route path="ActivityCreator" element={<ActivityCreator />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Route>
   )
 )

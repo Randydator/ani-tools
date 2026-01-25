@@ -1,6 +1,7 @@
 export enum MediaType {
     MANGA = 'MANGA',
     ANIME = 'ANIME',
+    BOTH = 'BOTH',
 }
 
 // search Activity
@@ -12,12 +13,12 @@ export interface ActivitySearchVariables {
 
 export interface ActivityCardData {
     activities: {
-      animeTitle: string;
-      Page: {
-        activities: ActivityCardEntries[];
-      };
+        animeTitle: string;
+        Page: {
+            activities: ActivityCardEntries[];
+        };
     };
-  }
+}
 
 export interface ActivityCardEntries {
     siteUrl: string;
@@ -34,11 +35,15 @@ export interface MediaPreview {
         userPreferred: string;
     };
     coverImage: {
-      medium: string;
+        medium: string;
     };
-  }
+    type: string;
+    episodes: number | null;
+    chapters: number | null;
+    progress: number | null;
+}
 
-  
+
 // AniLike
 export interface LikeNotification {
     user: {
@@ -58,7 +63,7 @@ export interface ReplyNotification {
         avatar: {
             large: string;
         };
-    }, 
+    },
     activity: {
         siteUrl: string;
     };
@@ -70,4 +75,31 @@ export interface LikeNotificationCardProps {
 export interface ReplyNotificationCardProps {
     notifications: ReplyNotification[];
 }
-  
+
+// Activity Creator
+export enum MediaStatus {
+    CURRENT = 'CURRENT',
+    PLANNING = 'PLANNING',
+    COMPLETED = 'COMPLETED',
+    DROPPED = 'DROPPED',
+    PAUSED = 'PAUSED',
+    REPEATING = 'REPEATING',
+}
+
+export interface MediaEntry {
+    mediaId: number;
+    private: boolean;
+    progress: number;
+    status: MediaStatus;
+    repeat: number;
+}
+
+export interface ActivityCreatorSearchVariables {
+    title: string,
+    status: MediaStatus,
+    progress: number | string
+    noMerge: boolean
+    type: MediaType
+}
+
+

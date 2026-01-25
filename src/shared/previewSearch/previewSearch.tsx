@@ -41,7 +41,7 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
     function selectPreviewItem(item: MediaPreview) {
         setSearchTerm(item.title.userPreferred)
         resetPopUp();
-        
+
         // to get previews for newly inserted searchTerm. This kinda doubles API calls, remove if that becomes an issue (because else it just comes back on new input > debounce)
         setSearchCompleted(true);
 
@@ -103,6 +103,9 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
                     onClick={() => {
                         setSearchTerm('');
                         setShowPopup(false);
+                        if (onPreviewClicked) {
+                            onPreviewClicked(null);
+                        }
                     }}
                     className="clearButton"
                 >
@@ -129,6 +132,11 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
                             <ListGroupItem key={index} className="listGroupItem" onClick={() => selectPreviewItem(item)}>
                                 <p>
                                     {DomPurify.sanitize(item.title.userPreferred)}
+                                    {mediaType === "BOTH" && (
+                                        <span className="entryTypeText">
+                                            ({item.type})
+                                        </span>
+                                    )}
                                 </p>
                                 <Image src={DomPurify.sanitize(item.coverImage.medium)} width="50px" height="60px" rounded />
                             </ListGroupItem>

@@ -6,6 +6,16 @@
     --clr-primary-a30: #fbbffb;
     --clr-primary-a40: #fdcafc;
     --clr-primary-a50: #fdd4fd;
+    --clr-primary-a60: #f9d3ff;
+
+    /** Dark theme primary disabled/hint colors **/
+    /* Use for less important metadata like 'Manga' or 'TV' tags */
+    --clr-primary-hint-high: #b875ba;   /* A muted, darker magenta */
+    --clr-primary-hint-mid:  #8a588c;   /* Subtle, clearly secondary */
+    --clr-primary-hint-low:  #5c3b5d;   /* Very deep; barely there against dark backgrounds */
+
+    /** Specific 'Disabled' state (Flat/Greyed) **/
+    --clr-primary-disabled:  #7a6b7a;   /* Desaturated mauve */
 
     /** Dark theme surface colors */
     --clr-surface-a0: #070718;

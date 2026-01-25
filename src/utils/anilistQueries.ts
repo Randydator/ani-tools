@@ -6,13 +6,10 @@ query {
 }
 `
 
-export const testQuery = `
+export const queryTest = `
 query {
   Media(id: 1) {
     id
-    title {
-      english
-    }
   }
 }
 `
@@ -258,8 +255,80 @@ query ($searchTerm: String, $type: MediaType)
       coverImage {
         medium
       }
-
+      type
+      episodes
+      chapters
     }
+  }
+}
+`
+
+export const querySearchMediaPreviewUntyped = `
+query ($searchTerm: String)
+{
+  Page (perPage: 20) {
+    media (search:$searchTerm) {
+      title {
+        userPreferred
+      }
+      id
+      coverImage {
+        medium
+      }
+      type
+      episodes
+      chapters
+    }
+  }
+}
+`
+
+export const queryMediaListEntryUserStats = `
+query ($mediaId: Int, $userId: Int){
+  MediaList(mediaId: $mediaId, userId: $userId) {
+    private
+    repeat
+    progress
+    status
+    media {
+      episodes
+      chapters
+    }
+  }
+}
+`
+
+export const mutationSaveMediaListEntry = `
+mutation($mediaId: Int, $status: MediaListStatus, $progress: Int, $private: Boolean, $repeat: Int){
+  SaveMediaListEntry(mediaId: $mediaId, status: $status, progress: $progress, private: $private, repeat: $repeat) {
+    status
+  }
+}
+`
+export const queryUserOptions = `
+query ($userId: Int) {
+  User(id: $userId){
+    options{
+      activityMergeTime
+    }
+  }
+}
+`
+
+export const mutationUserOptions = `
+mutation ($activityMergeTime:Int) {
+  UpdateUser(
+    activityMergeTime: $activityMergeTime
+  ) {
+    id
+  }
+}
+`
+
+export const mutationPrivateMediaEntry = `
+mutation($mediaId: Int, $private: Boolean, $repeat: Int){
+  SaveMediaListEntry(mediaId: $mediaId, private: $private, repeat: $repeat) {
+    status
   }
 }
 `

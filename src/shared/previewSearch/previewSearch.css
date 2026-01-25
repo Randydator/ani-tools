@@ -1,6 +1,12 @@
 .previewSearch {
     position: relative;
 
+    .entryTypeText {
+        color: var(--clr-primary-disabled);
+        font-size: 0.75rem;
+        font-family: 'Roboto', sans-serif;
+    }
+
     .popUp {
         position: absolute;
         top: 100%;

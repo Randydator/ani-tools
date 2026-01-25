@@ -33,8 +33,8 @@ function ActivitySearch() {
 
         <UserNameInput />
 
-        <div className="titleInput">
-          <FormGroup controlId="animeTitleInput">
+        <div>
+          <FormGroup>
             <Form.Label>Title:</Form.Label>
             <PreviewSearch
               name="title"
