@@ -55,6 +55,7 @@ function Header() {
             if (p === '/' || p === '') return 'AniTools';
             if (p.startsWith('/AniLike')) return 'AniLike';
             if (p.startsWith('/ActivitySearch')) return 'Activity Search';
+            if (p.startsWith('/ActivityCreator')) return 'Activity Creator';
             if (p.startsWith('/OauthCallback') || p.startsWith('/oauthCallback')) return 'Callback';
             return 'AniTools';
         }

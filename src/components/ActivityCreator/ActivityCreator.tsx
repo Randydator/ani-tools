@@ -6,17 +6,16 @@ import './activityCreator.css'
 import DomPurify from "dompurify"
 
 function ActivityCreator() {
-  const [mediaTitle, setMediaTitle] = useState('');
-  const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
-  const [mediaType, setMediaType] = useState<MediaType>(MediaType.BOTH);
   const [selectedMediaMaxProgress, setSelectedMediaMaxProgress] = useState<number | null>(null)
   const [progressTitleText, setProgressTitleText] = useState<string>('Progress:')
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString().trim())]))
-
+    console.log(searchPayload);
+    console.log(event)
+    
   };
 
   function handleProgressChange(event: React.ChangeEvent<HTMLInputElement>) { 
@@ -53,7 +52,7 @@ function ActivityCreator() {
             <Form.Label>Title:</Form.Label>
             <PreviewSearch
               name="title"
-              mediaType={mediaType}
+              mediaType={MediaType.BOTH}
               placeholder="Title of anime or manga"
               required
               className="aniInput"
@@ -70,7 +69,7 @@ function ActivityCreator() {
 
         <FormGroup controlId="statusSelect">
           <Form.Label>Status:</Form.Label>
-          <FormControl as="select" value={status} onChange={(e) => setStatus(e.target.value)}>
+          <FormControl name="status"as="select">
             <option value="">Select Status</option>
             <option value={MediaStatus.PLANNING}>Planning</option>
             <option value={MediaStatus.CURRENT}>Current</option>
@@ -83,8 +82,8 @@ function ActivityCreator() {
 
         <FormGroup controlId="progressInput">
           <Form.Label>{progressTitleText}</Form.Label>
-          <InputGroup className={progress < 0 ? 'border-danger' : ''}>
-            <FormControl type="number" max={selectedMediaMaxProgress ? selectedMediaMaxProgress + 1 : 1} min={-1} onChange={handleProgressChange} value={progress}/>
+          <InputGroup>
+            <FormControl name="progress" type="number" max={selectedMediaMaxProgress ? selectedMediaMaxProgress + 1 : 1} min={-1} onChange={handleProgressChange} value={progress}/>
           </InputGroup>
         </FormGroup>
         
