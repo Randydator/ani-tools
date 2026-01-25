@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { fetchAniListRemainingRequestLimit, fetchFromAnilist } from "../../utils/anilistRequestUtil";
-import { querySearchMedia, querySearchAnimeActivity, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
+import { querySearchMedia, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivityCreatorSearchVariables, MediaEntry } from "../../utils/anilistInterfaces";
@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 export const useActivityCreator = () => {
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
-    const remainingRequestsBuffer = 12; //A bit higher than necessary because AniList remainingRequest header can be funky. 8 necessary worst case
+    const remainingRequestsBuffer = 14; //A bit higher than necessary because AniList remainingRequest header can be funky. 8 necessary worst case
 
     async function returnUserToBeforeState(previousActivityMergeTime: number | null, previousMediaEntryStats: MediaEntry | null) {
         // If we changed the merge time, back to normal
@@ -19,10 +19,11 @@ export const useActivityCreator = () => {
 
         // privately return stats to normal (to not create activity), then adjust private if necessary
         if (previousMediaEntryStats) {
-            await fetchFromAnilist(mutationSaveMediaListEntry, { ...previousMediaEntryStats, private: true })
-            if (!previousMediaEntryStats.private) {
-                await fetchFromAnilist(mutationPrivateMediaEntry, { private: false, mediaId: previousMediaEntryStats.mediaId })
-            }
+            const privateUpdatedVariables = { ...previousMediaEntryStats, private: true }
+            await fetchFromAnilist(mutationSaveMediaListEntry, privateUpdatedVariables)
+
+            //When setting it to completed after a rewatch in previous step, it adds repeat + 1 after I set it to 0. Meaning we always need a 2nd request to set it to previous value.
+            await fetchFromAnilist(mutationPrivateMediaEntry, { private: previousMediaEntryStats.private, mediaId: previousMediaEntryStats.mediaId, repeat: previousMediaEntryStats.repeat })
         }
     }
 
@@ -37,7 +38,7 @@ export const useActivityCreator = () => {
 
         const remainingRequests = await fetchAniListRemainingRequestLimit()
         if (remainingRequests < remainingRequestsBuffer) {
-            throw new Error(`Rate limit too close. Please wait 1min and try again.`);
+            throw new Error(`Rate limit too close. Please wait 1 minute and try again.`);
         }
 
         let mediaId
@@ -55,8 +56,7 @@ export const useActivityCreator = () => {
                     currentUserActivityMergeTime = currentUserOptions.User.options.activityMergeTime
                     await fetchFromAnilist(mutationUserOptions, { activityMergeTime: 0 })
                     didChangeMergeTime = true
-                } catch (e) {
-                    console.error(e)
+                } catch {
                     throw new Error("Error while fetching current user statistics")
                 }
             }
@@ -67,7 +67,8 @@ export const useActivityCreator = () => {
                     mediaId: mediaId,
                     private: currentMediaEntry.MediaList.private,
                     status: currentMediaEntry.MediaList.status,
-                    progress: currentMediaEntry.MediaList.progress
+                    progress: currentMediaEntry.MediaList.progress,
+                    repeat: currentMediaEntry.MediaList.repeat
                 }
             } catch (e: unknown) {
                 if (!(e instanceof AxiosError)) {
@@ -95,6 +96,8 @@ export const useActivityCreator = () => {
                 );
             } catch (cleanupError) {
                 console.error("Cleanup failed! User data might be inconsistent.", cleanupError);
+                // eslint-disable-next-line no-unsafe-finally
+                throw new Error("Failed to clean up user state. Check if your activity merge time and this media entry stats are still ok.")
             }
         }
     }

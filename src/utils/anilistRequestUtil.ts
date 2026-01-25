@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { queryTest } from './anilistQueries';
 
+// TODO: rename function from fetch to query. Also make change file name :&
 export async function fetchFromAnilist(query: string, variables: object) {
     const accessToken = Cookies.get('access_token');
 

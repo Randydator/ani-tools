@@ -91,13 +91,14 @@ export interface MediaEntry {
     private: boolean;
     progress: number;
     status: MediaStatus;
+    repeat: number;
 }
 
 export interface ActivityCreatorSearchVariables {
     title: string,
     status: MediaStatus,
     progress: number | string
-    noMerge: Boolean
+    noMerge: boolean
     type: MediaType
 }
 

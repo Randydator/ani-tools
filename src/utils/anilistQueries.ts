@@ -299,8 +299,8 @@ query ($mediaId: Int, $userId: Int){
 `
 
 export const mutationSaveMediaListEntry = `
-mutation($mediaId: Int, $status: MediaListStatus, $progress: Int, $private: Boolean){
-  SaveMediaListEntry(mediaId: $mediaId, status: $status, progress: $progress, private: $private) {
+mutation($mediaId: Int, $status: MediaListStatus, $progress: Int, $private: Boolean, $repeat: Int){
+  SaveMediaListEntry(mediaId: $mediaId, status: $status, progress: $progress, private: $private, repeat: $repeat) {
     status,
     repeat,
     mediaId,
@@ -330,8 +330,8 @@ mutation ($activityMergeTime:Int) {
 `
 
 export const mutationPrivateMediaEntry = `
-mutation($mediaId: Int, $private: Boolean){
-  SaveMediaListEntry(mediaId: $mediaId, private: $private) {
+mutation($mediaId: Int, $private: Boolean, $repeat: Int){
+  SaveMediaListEntry(mediaId: $mediaId, private: $private, repeat: $repeat) {
     status,
     repeat,
     mediaId,

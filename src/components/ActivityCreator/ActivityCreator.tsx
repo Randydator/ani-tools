@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, FormGroup, Button, FormControl, InputGroup, Card } from 'react-bootstrap';
 import PreviewSearch from '../../shared/previewSearch/previewSearch';
 import { MediaStatus, MediaType, MediaPreview, ActivityCreatorSearchVariables } from '../../utils/anilistInterfaces';
@@ -78,7 +78,6 @@ function ActivityCreator() {
       type: media.type as MediaType
     };
 
-    console.log("Payload:", mutationVariables);
     mutate(mutationVariables);
   };
 
@@ -210,11 +209,6 @@ function ActivityCreator() {
           Create Activity
         </Button>
       </Form>
-
-      {/* Button that logs the current selected media */}
-      <Button onClick={() => console.log("Current Selected Media:", selectedMediaPreview)} className="mt-2" style={{ border: 'none', width: '100%' }}>
-        Log Selected Media
-      </Button>
 
       <div>
         {isPending && (
