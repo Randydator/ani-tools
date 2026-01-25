@@ -137,6 +137,9 @@ function ActivityCreator() {
 
   return (
     <div className="formContainer">
+      <Form.Label style={{ color: '#F0E68C', whiteSpace: 'pre-line' }}>
+        {"Disclaimer: This will create a public activity.\nIt will not alter your existing media, only create a singular activity."}
+      </Form.Label>
       <Form onSubmit={handleSubmit} className='activityCreatorForm' noValidate>
 
         <FormGroup className="mb-4 position-relative">

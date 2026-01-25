@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 
 export const useActivityCreator = () => {
     const user = useContext(UserContext)
-    const loggedInUserId = user?.id
+    const loggedInUserId = Number(user?.id)
     const remainingRequestsBuffer = 14; //A bit higher than necessary because AniList remainingRequest header can be funky. 8 necessary worst case
 
     async function returnUserToBeforeState(previousActivityMergeTime: number | null, previousMediaEntryStats: MediaEntry | null) {
