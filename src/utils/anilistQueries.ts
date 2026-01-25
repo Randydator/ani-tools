@@ -289,6 +289,10 @@ query ($mediaId: Int, $userId: Int){
     repeat
     progress
     status
+    media {
+      episodes
+      chapters
+    }
   }
 }
 `
