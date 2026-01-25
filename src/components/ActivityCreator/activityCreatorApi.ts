@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchAniListRemainingRequestLimit, fetchFromAnilist } from "../../utils/anilistRequestUtil";
-import { querySearchMedia, querySearchAnimeActivity, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions } from "../../utils/anilistQueries";
+import { querySearchMedia, querySearchAnimeActivity, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivityCreatorSearchVariables, MediaEntry } from "../../utils/anilistInterfaces";
@@ -9,33 +9,21 @@ import { AxiosError } from "axios";
 export const useActivityCreator = (variables: ActivityCreatorSearchVariables) => {
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
-    const remainingRequestsBuffer = 12; //A bit higher than necessary because AniList remainingRequest header can be funky
-
-    /* TODO: 
-        1 request > get current stats (for setting back later)
-        If possible, get rate limit remaining from this request. If not, send rate limit request before. Going over rate limit in the middle very bad. 
-        1 request > get userOptions (merge time)
-
-        Let's say user wants to rewatch episode 9/12 and had it as completed before. 
-        (Optional): Set merge time to never
-        Create activity: private: false; progress: 9, status: repeating, mediaId...
-        Return mediaEntry stats to before in private: private: true, progress: like before; status: like before: mediaId..., repeat: like before
-        1 request > set private to before
-        
-        (Optional): Set merge time to before
-
-        */
+    const remainingRequestsBuffer = 12; //A bit higher than necessary because AniList remainingRequest header can be funky. 8 necessary worst case
 
     async function returnUserToBeforeState(previousActivityMergeTime: number | null, previousMediaEntryStats: MediaEntry | null) {
         // If we changed the merge time, back to normal
         if (previousActivityMergeTime) {
-            await fetchFromAnilist(mutationUserOptions, { activityMergeTime: currentUserActivityMergeTime })
+            await fetchFromAnilist(mutationUserOptions, { activityMergeTime: previousActivityMergeTime })
         }
 
+        // privately return stats to normal (to not create activity), then adjust private if necessary
         if (previousMediaEntryStats) {
-            const previousMediaEntryStats = {}
+            await fetchFromAnilist(mutationSaveMediaListEntry, { ...previousMediaEntryStats, private: true })
+            if (!previousMediaEntryStats.private) {
+                await fetchFromAnilist(mutationPrivateMediaEntry, { private: false, mediaId: previousMediaEntryStats.mediaId })
+            }
         }
-
     }
 
     return useQuery({
@@ -75,8 +63,13 @@ export const useActivityCreator = (variables: ActivityCreatorSearchVariables) =>
                 }
 
                 try {
-                    currentMediaEntryStats = await fetchFromAnilist(queryMediaListEntryUserStats, { userId: loggedInUserId, mediaId: mediaId })
-                    // TODO: I am changing status progress private. Write that together with media ID into the current object. Then continue function above
+                    const currentMediaEntry = await fetchFromAnilist(queryMediaListEntryUserStats, { userId: loggedInUserId, mediaId: mediaId })
+                    currentMediaEntryStats = {
+                        mediaId: mediaId,
+                        private: currentMediaEntry.MediaList.private,
+                        status: currentMediaEntry.MediaList.status,
+                        progress: currentMediaEntry.MediaList.progress
+                    }
                 } catch (e: unknown) {
                     if (!(e instanceof AxiosError)) {
                         throw new Error("Error while fetching media entry");
@@ -88,24 +81,20 @@ export const useActivityCreator = (variables: ActivityCreatorSearchVariables) =>
                     }
                 }
 
-                const updatedVariables = { ...variables, mediaId: mediaId.Media.id, private: false }
+                const updatedVariables = { ...variables, mediaId: mediaId, private: false }
                 await fetchFromAnilist(mutationSaveMediaListEntry, updatedVariables)
                 didChangeMediaEntryStats = true;
-
-
             } finally {
-                returnUserToBeforeState(
-                    didChangeMergeTime ? currentUserActivityMergeTime : null,
-                    didChangeMediaEntryStats ? currentMediaEntryStats : null
-                )
-            }
+                try {
+                    await returnUserToBeforeState(
+                        didChangeMergeTime ? currentUserActivityMergeTime : null,
+                        didChangeMediaEntryStats ? currentMediaEntryStats : null
+                    );
+                } catch (cleanupError) {
+                    console.error("Cleanup failed! User data might be inconsistent.", cleanupError);
+                }
 
-            /* add anime title to give user feedback what media anilist fuzy search found
-            return {
-                ...activityData,
-                animeTitle: mediaId.Media.title.english ? mediaId.Media.title.english : mediaId.Media.title.romaji
             }
-            */
         },
         retry: false,
         enabled: Object.keys(variables).length > 0,

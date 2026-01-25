@@ -328,3 +328,15 @@ mutation ($activityMergeTime:Int) {
   }
 }
 `
+
+export const mutationPrivateMediaEntry = `
+mutation($mediaId: Int, $private: Boolean){
+  SaveMediaListEntry(mediaId: $mediaId, private: $private) {
+    status,
+    repeat,
+    mediaId,
+    progress,
+    private
+  }
+}
+`
