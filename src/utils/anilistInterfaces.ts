@@ -84,3 +84,19 @@ export enum MediaStatus {
     PAUSED = 'PAUSED',
     REPEATING = 'REPEATING',
 }
+
+export interface MediaEntry {
+    mediaId: number;
+    private: boolean;
+    progress: number;
+    status: MediaStatus;
+}
+
+export interface ActivityCreatorSearchVariables {
+    title: string,
+    status: MediaStatus,
+    progress: number | string
+    noMerge: Boolean
+}
+
+

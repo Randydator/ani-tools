@@ -6,13 +6,10 @@ query {
 }
 `
 
-export const testQuery = `
+export const queryTest = `
 query {
   Media(id: 1) {
     id
-    title {
-      english
-    }
   }
 }
 `
@@ -301,9 +298,9 @@ query ($mediaId: Int, $userId: Int){
 }
 `
 
-export const mutationMarkMediaPrivate = `
-mutation($mediaId: Int, $repeat: Int, $status: String, $progress: Int){
-  SaveMediaListEntry(mediaId: $mediaId, repeat: $repeat, status: $status, progress: $progress) {
+export const mutationSaveMediaListEntry = `
+mutation($mediaId: Int, $status: String, $progress: Int, $private: Boolean){
+  SaveMediaListEntry(mediaId: $mediaId, status: $status, progress: $progress, private: $private) {
     status,
     repeat,
     mediaId,

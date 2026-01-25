@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Form, FormGroup, Button, FormControl, InputGroup, Card } from 'react-bootstrap';
 import PreviewSearch from '../../shared/previewSearch/previewSearch';
 import { MediaStatus, MediaType, MediaPreview } from '../../utils/anilistInterfaces';
 import './activityCreator.css'
 import DomPurify from "dompurify"
+import { useActivityCreator } from './activityCreatorApi';
 
 function ActivityCreator() {
   const [progress, setProgress] = useState<number | string>('');
   const [status, setStatus] = useState<string>('');
   const [selectedMediaMaxProgress, setSelectedMediaMaxProgress] = useState<number | null>(null);
+
+  const [variables, setVariables] = useState({})
+  const { isLoading, error, data } = useActivityCreator(variables)
 
   // Error Messages
   const [titleErrorMsg, setTitleErrorMsg] = useState<string | null>(null);
@@ -40,6 +44,11 @@ function ActivityCreator() {
       hasError = true;
     }
 
+    if (status !== MediaStatus.PLANNING && !progress) {
+      setProgressErrorMsg("Won't create an activity");
+      hasError = true;
+    }
+
     if (hasError) return;
 
     const searchPayload = Object.fromEntries(
@@ -48,8 +57,9 @@ function ActivityCreator() {
         DomPurify.sanitize(value.toString().trim())
       ])
     );
-
+    
     console.log("Payload:", searchPayload);
+    setVariables(searchPayload)
   };
 
   function handleStatusChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -168,10 +178,48 @@ function ActivityCreator() {
           </InputGroup>
         </FormGroup>
 
+        <FormGroup controlId="checkboxInput">
+          <Form.Check
+            name="noMerge"
+            label="Don't merge activity"
+            type="checkbox"
+          />
+        </FormGroup>
+
         <Button type="submit" className="aniSubmitButton mt-2" style={{ border: 'none', width: '100%' }}>
           Create Activity
         </Button>
       </Form>
+
+      <div>
+        {isLoading && (
+          <Card className='activityCard'>
+            <Card.Body>
+              <Card.Title>
+                <p>Loading...</p>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        )}
+        {error && (
+          <Card className='activityCard'>
+            <Card.Body>
+              <Card.Title>
+                <p>Error: {error.message}</p>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        )}
+        {data && (
+          <Card className='activityCard'>
+            <Card.Body>
+              <Card.Title>
+                <p>Activity created!</p>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }
