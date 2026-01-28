@@ -30,7 +30,7 @@ function ActivityCreator() {
     const formData = new FormData(event.currentTarget);
     const titleValue = formData.get("title");
     const media = selectedMediaPreview;
-    const progressValue = Number(progress);
+    let progressValue = Number(progress);
 
     let hasError = false;
 
@@ -73,6 +73,11 @@ function ActivityCreator() {
     }
 
     if (hasError) return;
+
+    // AniList has a bug where episode count on paused creates an activity with messed up text
+    if (status === MediaStatus.PAUSED && progress) {
+      progressValue = 0
+    }
 
     const mutationVariables: ActivityCreatorSearchVariables = {
       title: DomPurify.sanitize(titleValue?.toString().trim() || ""),
