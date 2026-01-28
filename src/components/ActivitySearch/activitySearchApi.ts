@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFromAnilist } from "../../utils/anilistRequestUtil";
+import { queryAnilist } from "../../utils/anilistApiClient";
 import { querySearchMedia, querySearchAnimeActivity, querySearchUsername } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
@@ -17,7 +17,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
             let userId
             try {
                 if ('username' in variables && variables.username.trim() !== "") {
-                    userId = await fetchFromAnilist(querySearchUsername, variables)
+                    userId = await queryAnilist(querySearchUsername, variables)
                 }
             } catch {
                 throw new Error("User cannot be found");
@@ -25,7 +25,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
 
             let mediaId
             try {
-                mediaId = await fetchFromAnilist(querySearchMedia, variables)
+                mediaId = await queryAnilist(querySearchMedia, variables)
             } catch {
                 throw new Error("Media cannot be found");
             }
@@ -33,7 +33,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
             const updatedVariables = { ...variables, userId: userId?.User?.id || loggedInUserId, mediaId: mediaId.Media.id }
             let activityData
             try {
-                activityData = await fetchFromAnilist(querySearchAnimeActivity, updatedVariables)
+                activityData = await queryAnilist(querySearchAnimeActivity, updatedVariables)
             } catch {
                 throw new Error("Activities cannot be found");
             }
