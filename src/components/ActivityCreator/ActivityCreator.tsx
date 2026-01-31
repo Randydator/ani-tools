@@ -11,6 +11,8 @@ function ActivityCreator() {
   const [status, setStatus] = useState<string>('');
   const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
 
+  const invalidNumberChars = ['e', 'E', '.', '+', '-', ','];
+
   const {
     mutate,
     isPending,
@@ -203,6 +205,13 @@ function ActivityCreator() {
               onChange={handleProgressChange}
               value={progress}
               isInvalid={!!progressErrorMsg}
+              inputMode='numeric'
+              pattern='[0-9]*'
+              onKeyDown={(e) => {
+                if (invalidNumberChars.includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <Form.Control.Feedback type="invalid" style={absoluteErrorStyle}>
               {progressErrorMsg}
