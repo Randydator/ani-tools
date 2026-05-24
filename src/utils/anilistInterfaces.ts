@@ -96,11 +96,13 @@ export interface MediaEntry {
     repeat: number;
 }
 
+export type ActivityMergeOption = 'default' | 'always' | 'never';
+
 export interface ActivityCreatorSearchVariables {
     title: string,
     status: MediaStatus,
-    progress: number | string
-    noMerge: boolean
+    progress: number | string,
+    mergeOption: ActivityMergeOption,
     type: MediaType
 }
 

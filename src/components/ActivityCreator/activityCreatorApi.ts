@@ -10,10 +10,11 @@ export const useActivityCreator = () => {
     const user = useContext(UserContext)
     const loggedInUserId = Number(user?.id)
     const remainingRequestsBuffer = 14; //A bit higher than necessary because AniList remainingRequest header can be funky. 8 necessary worst case
+    const ALWAYS_MERGE_MINUTES = 20161; // Above two weeks (20160 mins) means always merge
 
     async function returnUserToBeforeState(previousActivityMergeTime: number | null, previousMediaEntryStats: MediaEntry | null) {
         // If we changed the merge time, back to normal
-        if (previousActivityMergeTime) {
+        if (previousActivityMergeTime !== null) {
             await queryAnilist(mutationUserOptions, { activityMergeTime: previousActivityMergeTime })
         }
 
@@ -50,11 +51,12 @@ export const useActivityCreator = () => {
         }
 
         try {
-            if (variables.noMerge) {
+            if (variables.mergeOption !== 'default') {
                 try {
                     const currentUserOptions = await queryAnilist(queryUserOptions, { userId: loggedInUserId })
                     currentUserActivityMergeTime = currentUserOptions.User.options.activityMergeTime
-                    await queryAnilist(mutationUserOptions, { activityMergeTime: 0 })
+                    const activityMergeTime = variables.mergeOption === 'never' ? 0 : ALWAYS_MERGE_MINUTES
+                    await queryAnilist(mutationUserOptions, { activityMergeTime })
                     didChangeMergeTime = true
                 } catch {
                     throw new Error("Error while fetching current user statistics")

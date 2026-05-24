@@ -10,6 +10,7 @@ function ActivityCreator() {
   const [progress, setProgress] = useState<number | string>('');
   const [status, setStatus] = useState<string>('');
   const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
+  const [mergeOption, setMergeOption] = useState<'default' | 'always' | 'never'>('default');
 
   const invalidNumberChars = ['e', 'E', '.', '+', '-', ','];
 
@@ -85,8 +86,7 @@ function ActivityCreator() {
       title: DomPurify.sanitize(titleValue?.toString().trim() || ""),
       status: status as MediaStatus,
       progress: Number(progress),
-      // This is the clean way to handle the boolean from FormData
-      noMerge: formData.has("noMerge"),
+      mergeOption: mergeOption,
       type: media.type as MediaType
     };
 
@@ -219,12 +219,25 @@ function ActivityCreator() {
           </InputGroup>
         </FormGroup>
 
-        <FormGroup controlId="checkboxInput">
-          <Form.Check
-            name="noMerge"
-            label="Don't merge activity"
-            type="checkbox"
-          />
+        <FormGroup controlId="mergeOptionInput" className="mb-4">
+          <div>
+            {[
+              { id: 'merge-default', value: 'default', label: 'Default Merge Time' },
+              { id: 'merge-always', value: 'always', label: 'Always merge' },
+              { id: 'merge-never', value: 'never', label: 'Never merge' }
+            ].map((option) => (
+              <Form.Check
+                key={option.id}
+                type="radio"
+                id={option.id}
+                name="mergeOption"
+                value={option.value}
+                label={option.label}
+                checked={mergeOption === option.value}
+                onChange={() => setMergeOption(option.value as 'default' | 'always' | 'never')}
+              />
+            ))}
+          </div>
         </FormGroup>
 
         <Button type="submit" className="aniSubmitButton mt-2" style={{ border: 'none', width: '100%' }}>
