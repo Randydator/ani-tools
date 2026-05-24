@@ -188,10 +188,24 @@ query ($page: Int, $perPage: Int) {
 }
 `
 
-export const querySearchMedia = `
+export const querySearchMediaByTitle = `
 query ($title: String, $type: MediaType)
 {
   Media(search: $title, type:$type) {
+    id
+    title{
+        english
+        romaji
+    }
+  }
+
+}
+`
+
+export const querySearchMediaById = `
+query ($mediaId: Int, $type: MediaType)
+{
+  Media(id: $mediaId, type:$type) {
     id
     title{
         english

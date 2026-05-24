@@ -8,7 +8,8 @@ export enum MediaType {
 export interface ActivitySearchVariables {
     username: string,
     title: string,
-    type: MediaType
+    type: MediaType,
+    mediaId: string
 }
 
 export interface ActivityCardData {

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryAnilist } from "../../utils/anilistApiClient";
-import { querySearchMedia, querySearchAnimeActivity, querySearchUsername } from "../../utils/anilistQueries";
+import { querySearchMediaByTitle, querySearchAnimeActivity, querySearchUsername, querySearchMediaById } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivitySearchVariables } from "../../utils/anilistInterfaces";
 
-export const useActivitySearch = (variables: ActivitySearchVariables | object) => { 
+export const useActivitySearch = (variables: ActivitySearchVariables) => {
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
 
@@ -23,14 +23,20 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
                 throw new Error("User cannot be found");
             }
 
-            let mediaId
+            let media
+            // media provided if clicked on an entry in PreviewSearch, otherwise try to find media via title search
             try {
-                mediaId = await queryAnilist(querySearchMedia, variables)
+                if (variables.mediaId) {
+                    media = await queryAnilist(querySearchMediaById, variables)
+                } else {
+                    media = await queryAnilist(querySearchMediaByTitle, variables)
+                }
             } catch {
                 throw new Error("Media cannot be found");
             }
 
-            const updatedVariables = { ...variables, userId: userId?.User?.id || loggedInUserId, mediaId: mediaId.Media.id }
+
+            const updatedVariables = { ...variables, userId: userId?.User?.id || loggedInUserId, mediaId: media.Media.id }
             let activityData
             try {
                 activityData = await queryAnilist(querySearchAnimeActivity, updatedVariables)
@@ -41,7 +47,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
             // add anime title to give user feedback what media anilist fuzy search found
             return {
                 ...activityData,
-                animeTitle: mediaId.Media.title.english ? mediaId.Media.title.english : mediaId.Media.title.romaji
+                animeTitle: media.Media.title.english ? media.Media.title.english : media.Media.title.romaji
             }
         },
         retry: false,

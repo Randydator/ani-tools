@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { fetchAniListRemainingRequestLimit, queryAnilist } from "../../utils/anilistApiClient";
-import { querySearchMedia, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
+import { querySearchMediaByTitle, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivityCreatorSearchVariables, MediaEntry } from "../../utils/anilistInterfaces";
@@ -43,7 +43,7 @@ export const useActivityCreator = () => {
 
         let mediaId
         try {
-            const media = await queryAnilist(querySearchMedia, variables)
+            const media = await queryAnilist(querySearchMediaByTitle, variables)
             mediaId = media.Media.id
         } catch {
             throw new Error("Media cannot be found");
