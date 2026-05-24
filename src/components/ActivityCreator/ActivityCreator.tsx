@@ -85,7 +85,7 @@ function ActivityCreator() {
     const mutationVariables: ActivityCreatorSearchVariables = {
       title: DomPurify.sanitize(titleValue?.toString().trim() || ""),
       status: status as MediaStatus,
-      progress: Number(progress),
+      progress: progressValue,
       mergeOption: mergeOption,
       type: media.type as MediaType
     };

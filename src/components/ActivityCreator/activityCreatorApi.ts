@@ -6,6 +6,26 @@ import { useContext } from "react";
 import { ActivityCreatorSearchVariables, MediaEntry } from "../../utils/anilistInterfaces";
 import { AxiosError } from "axios";
 
+function isSameProgressEntry(currentEntry: MediaEntry | null, variables: ActivityCreatorSearchVariables) {
+    return currentEntry !== null
+        && currentEntry.status === variables.status
+        && currentEntry.progress === Number(variables.progress);
+}
+
+function buildSaveMediaListEntryVariables(
+    variables: ActivityCreatorSearchVariables,
+    mediaId: number,
+    isPrivate: boolean,
+    progressOverride?: number
+) {
+    return {
+        mediaId,
+        status: variables.status,
+        progress: progressOverride !== undefined ? progressOverride : Number(variables.progress),
+        private: isPrivate
+    };
+}
+
 export const useActivityCreator = () => {
     const user = useContext(UserContext)
     const loggedInUserId = Number(user?.id)
@@ -84,6 +104,15 @@ export const useActivityCreator = () => {
             }
 
             try {
+                if (isSameProgressEntry(currentMediaEntryStats, variables)) {
+                    const privateProgress =  Math.max(0, currentMediaEntryStats!.progress - 1);
+                    const privateUpdatedVariables = buildSaveMediaListEntryVariables(variables, mediaId, true, privateProgress)
+                    await queryAnilist(
+                        mutationSaveMediaListEntry,
+                        privateUpdatedVariables
+                    )
+                }
+
                 const updatedVariables = { ...variables, mediaId: mediaId, private: false }
                 await queryAnilist(mutationSaveMediaListEntry, updatedVariables)
                 didChangeMediaEntryStats = true;
