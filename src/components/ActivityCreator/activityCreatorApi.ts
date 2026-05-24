@@ -1,29 +1,50 @@
 import { useMutation } from "@tanstack/react-query";
-import { fetchAniListRemainingRequestLimit, fetchFromAnilist } from "../../utils/anilistRequestUtil";
-import { querySearchMedia, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
+import { fetchAniListRemainingRequestLimit, queryAnilist } from "../../utils/anilistApiClient";
+import { querySearchMediaByTitle, queryUserOptions, queryMediaListEntryUserStats, mutationSaveMediaListEntry, mutationUserOptions, mutationPrivateMediaEntry } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivityCreatorSearchVariables, MediaEntry } from "../../utils/anilistInterfaces";
 import { AxiosError } from "axios";
 
+function isSameProgressEntry(currentEntry: MediaEntry | null, variables: ActivityCreatorSearchVariables) {
+    return currentEntry !== null
+        && currentEntry.status === variables.status
+        && currentEntry.progress === Number(variables.progress);
+}
+
+function buildSaveMediaListEntryVariables(
+    variables: ActivityCreatorSearchVariables,
+    mediaId: number,
+    isPrivate: boolean,
+    progressOverride?: number
+) {
+    return {
+        mediaId,
+        status: variables.status,
+        progress: progressOverride !== undefined ? progressOverride : Number(variables.progress),
+        private: isPrivate
+    };
+}
+
 export const useActivityCreator = () => {
     const user = useContext(UserContext)
     const loggedInUserId = Number(user?.id)
     const remainingRequestsBuffer = 14; //A bit higher than necessary because AniList remainingRequest header can be funky. 8 necessary worst case
+    const ALWAYS_MERGE_MINUTES = 20161; // Above two weeks (20160 mins) means always merge
 
     async function returnUserToBeforeState(previousActivityMergeTime: number | null, previousMediaEntryStats: MediaEntry | null) {
         // If we changed the merge time, back to normal
-        if (previousActivityMergeTime) {
-            await fetchFromAnilist(mutationUserOptions, { activityMergeTime: previousActivityMergeTime })
+        if (previousActivityMergeTime !== null) {
+            await queryAnilist(mutationUserOptions, { activityMergeTime: previousActivityMergeTime })
         }
 
         // privately return stats to normal (to not create activity), then adjust private if necessary
         if (previousMediaEntryStats) {
             const privateUpdatedVariables = { ...previousMediaEntryStats, private: true }
-            await fetchFromAnilist(mutationSaveMediaListEntry, privateUpdatedVariables)
+            await queryAnilist(mutationSaveMediaListEntry, privateUpdatedVariables)
 
             //When setting it to completed after a rewatch in previous step, it adds repeat + 1 after I set it to 0. Meaning we always need a 2nd request to set it to previous value.
-            await fetchFromAnilist(mutationPrivateMediaEntry, { private: previousMediaEntryStats.private, mediaId: previousMediaEntryStats.mediaId, repeat: previousMediaEntryStats.repeat })
+            await queryAnilist(mutationPrivateMediaEntry, { private: previousMediaEntryStats.private, mediaId: previousMediaEntryStats.mediaId, repeat: previousMediaEntryStats.repeat })
         }
     }
 
@@ -43,18 +64,19 @@ export const useActivityCreator = () => {
 
         let mediaId
         try {
-            const media = await fetchFromAnilist(querySearchMedia, variables)
+            const media = await queryAnilist(querySearchMediaByTitle, variables)
             mediaId = media.Media.id
         } catch {
             throw new Error("Media cannot be found");
         }
 
         try {
-            if (variables.noMerge) {
+            if (variables.mergeOption !== 'default') {
                 try {
-                    const currentUserOptions = await fetchFromAnilist(queryUserOptions, { userId: loggedInUserId })
+                    const currentUserOptions = await queryAnilist(queryUserOptions, { userId: loggedInUserId })
                     currentUserActivityMergeTime = currentUserOptions.User.options.activityMergeTime
-                    await fetchFromAnilist(mutationUserOptions, { activityMergeTime: 0 })
+                    const activityMergeTime = variables.mergeOption === 'never' ? 0 : ALWAYS_MERGE_MINUTES
+                    await queryAnilist(mutationUserOptions, { activityMergeTime })
                     didChangeMergeTime = true
                 } catch {
                     throw new Error("Error while fetching current user statistics")
@@ -62,7 +84,7 @@ export const useActivityCreator = () => {
             }
 
             try {
-                const currentMediaEntry = await fetchFromAnilist(queryMediaListEntryUserStats, { userId: loggedInUserId, mediaId: mediaId })
+                const currentMediaEntry = await queryAnilist(queryMediaListEntryUserStats, { userId: loggedInUserId, mediaId: mediaId })
                 currentMediaEntryStats = {
                     mediaId: mediaId,
                     private: currentMediaEntry.MediaList.private,
@@ -82,8 +104,17 @@ export const useActivityCreator = () => {
             }
 
             try {
+                if (isSameProgressEntry(currentMediaEntryStats, variables)) {
+                    const privateProgress =  Math.max(0, currentMediaEntryStats!.progress - 1);
+                    const privateUpdatedVariables = buildSaveMediaListEntryVariables(variables, mediaId, true, privateProgress)
+                    await queryAnilist(
+                        mutationSaveMediaListEntry,
+                        privateUpdatedVariables
+                    )
+                }
+
                 const updatedVariables = { ...variables, mediaId: mediaId, private: false }
-                await fetchFromAnilist(mutationSaveMediaListEntry, updatedVariables)
+                await queryAnilist(mutationSaveMediaListEntry, updatedVariables)
                 didChangeMediaEntryStats = true;
             } catch {
                 throw new Error("Failed to update media entry stats")

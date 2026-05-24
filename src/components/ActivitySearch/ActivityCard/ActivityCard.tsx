@@ -1,12 +1,11 @@
 import { ActivityCardData, ActivityCardEntries } from '../../../utils/anilistInterfaces'
 import './activityCard.css'
-
 import { Card } from 'react-bootstrap'
 
 // TODO: Use userPreferred for title here as well
 
 function ActivityCard(activities: ActivityCardData) {
-    const animeTitle = activities.activities.animeTitle
+    const mediaTitle = activities.activities.mediaTitle
     const activityList: ActivityCardEntries[] = activities.activities.Page.activities
 
     if (activityList.length === 0) {
@@ -14,7 +13,8 @@ function ActivityCard(activities: ActivityCardData) {
             <Card className='activityCard'>
                 <Card.Body>
                     <Card.Title>
-                        <p>No activities found for media: {animeTitle}</p>
+                        <p>No activities found for media: {mediaTitle}</p>
+                        <img src={activities.activities.mediaCoverImage} alt={mediaTitle} className='mediaCoverImage' />
                     </Card.Title>
                 </Card.Body>
             </Card>
@@ -31,11 +31,15 @@ function ActivityCard(activities: ActivityCardData) {
                 >
                     <Card.Body>
                         <Card.Title>
-                            <p>{progress ? status + ' ' + progress : status}</p>
+                            <p>
+                                {((txt) => txt.charAt(0).toUpperCase() + txt.slice(1))(
+                                    progress ? `${status} ${progress}` : status
+                                )}
+                            </p>
                         </Card.Title>
                     </Card.Body>
                     <Card.Footer className='c-footer'>
-                        <p>{new Date(createdAt * 1000).toLocaleString([], {hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit'})}</p>
+                        <p>{new Date(createdAt * 1000).toLocaleString([], { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
                     </Card.Footer>
                 </Card>
             ))}

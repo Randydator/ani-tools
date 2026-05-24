@@ -1,11 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFromAnilist } from "../../utils/anilistRequestUtil";
-import { querySearchMedia, querySearchAnimeActivity, querySearchUsername } from "../../utils/anilistQueries";
+import { queryAnilist } from "../../utils/anilistApiClient";
+import { querySearchMediaByTitle, querySearchAnimeActivity, querySearchUsername, querySearchMediaById } from "../../utils/anilistQueries";
 import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivitySearchVariables } from "../../utils/anilistInterfaces";
 
-export const useActivitySearch = (variables: ActivitySearchVariables | object) => { 
+function validateActivitySearchVariables(variables: ActivitySearchVariables | null | undefined, loggedInUserId: number | undefined): boolean {
+    if (!variables) return false
+
+    // require a media type and at least one non-empty search field
+    if (!variables.type) return false
+
+    const hasUsername = Boolean(variables.username.trim() !== "") || loggedInUserId !== undefined
+    const hasTitleOrMediaId = Boolean(variables.title && variables.title.toString().trim() !== "") || variables.mediaId !== null
+
+    return hasUsername && hasTitleOrMediaId
+}
+
+
+export const useActivitySearch = (variables: ActivitySearchVariables) => {
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
 
@@ -16,36 +29,41 @@ export const useActivitySearch = (variables: ActivitySearchVariables | object) =
             // try catch each request for proper error handling
             let userId
             try {
-                if ('username' in variables && variables.username.trim() !== "") {
-                    userId = await fetchFromAnilist(querySearchUsername, variables)
-                }
-            } catch {
+                userId = variables.username.trim() !== ""
+                    ? await queryAnilist(querySearchUsername, variables)
+                    : userId = loggedInUserId
+            }
+            catch {
                 throw new Error("User cannot be found");
             }
 
-            let mediaId
+            let media
+            // media provided if clicked on an entry in PreviewSearch, otherwise try to find media via title search
             try {
-                mediaId = await fetchFromAnilist(querySearchMedia, variables)
+                media = variables.mediaId
+                    ? await queryAnilist(querySearchMediaById, variables)
+                    : await queryAnilist(querySearchMediaByTitle, variables)
             } catch {
                 throw new Error("Media cannot be found");
             }
 
-            const updatedVariables = { ...variables, userId: userId?.User?.id || loggedInUserId, mediaId: mediaId.Media.id }
+            const updatedVariables = { ...variables, userId: userId?.User?.id || loggedInUserId, mediaId: media.Media.id }
             let activityData
             try {
-                activityData = await fetchFromAnilist(querySearchAnimeActivity, updatedVariables)
+                activityData = await queryAnilist(querySearchAnimeActivity, updatedVariables)
             } catch {
                 throw new Error("Activities cannot be found");
             }
 
-            // add anime title to give user feedback what media anilist fuzy search found
+            variables.mediaId = null // reset mediaId to not use previous search's mediaId for next search if user changes title
             return {
                 ...activityData,
-                animeTitle: mediaId.Media.title.english ? mediaId.Media.title.english : mediaId.Media.title.romaji
+                mediaTitle: media.Media.title.english ? media.Media.title.english : media.Media.title.romaji,
+                mediaCoverImage: media.Media.coverImage.large
             }
         },
         retry: false,
-        enabled: Object.keys(variables).length > 0,
+        enabled: validateActivitySearchVariables(variables, loggedInUserId),
         staleTime: Infinity
     })
 };

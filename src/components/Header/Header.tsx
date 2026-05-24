@@ -7,7 +7,7 @@ import { login } from './authenticate';
 import Cookies from 'js-cookie';
 import { UserContext, User } from './UserContext';
 
-import { fetchFromAnilist } from '../../utils/anilistRequestUtil';
+import { queryAnilist } from '../../utils/anilistApiClient';
 import { getUsernameById } from '../../utils/anilistQueries';
 
 function Header() {
@@ -37,7 +37,7 @@ function Header() {
             const accessTokenDecoded = JSON.parse(atob(token.split('.')[1]))
             const loggedInUserId = accessTokenDecoded.sub
 
-            const userQuery = await fetchFromAnilist(getUsernameById, { userId: loggedInUserId })
+            const userQuery = await queryAnilist(getUsernameById, { userId: loggedInUserId })
             const username = userQuery.User.name
             const siteUrl = userQuery.User.siteUrl
             const avatar = userQuery.User.avatar.medium

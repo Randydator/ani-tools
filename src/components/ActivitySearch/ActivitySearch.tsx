@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Form, FormGroup, Button} from "react-bootstrap"
+import { Form, FormGroup, Button } from "react-bootstrap"
 import DomPurify from "dompurify"
 import { Card } from "react-bootstrap"
 
@@ -7,14 +7,14 @@ import './activitySearch.css'
 import { useActivitySearch } from "./activitySearchApi"
 import ActivityCard from "./ActivityCard/ActivityCard"
 import PreviewSearch from "../../shared/previewSearch/previewSearch"
-import { MediaType } from "../../utils/anilistInterfaces"
+import { MediaPreview, MediaType, ActivitySearchVariables } from "../../utils/anilistInterfaces"
 import UserNameInput from "../../shared/userNameInput/usernameInput"
 
 function ActivitySearch() {
-
-  const [variables, setVariables] = useState({})
   const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
+  const [variables, setVariables] = useState<ActivitySearchVariables>({ username: "", title: "", type: mediaType, mediaId: null })
   const { isLoading, error, data } = useActivitySearch(variables)
+  const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
 
   function handleMediaTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
     setMediaType(event.target.value as MediaType)
@@ -22,8 +22,17 @@ function ActivitySearch() {
 
   const submitFunction = (event: any) => {
     event.preventDefault()
-    // get all Form data, sanatize it and put it into an object
-    const searchPayload = Object.fromEntries(Array.from(new FormData(event.target).entries()).map(([key, value]) => [key, DomPurify.sanitize(value.toString().trim())]))
+    // get all Form data, sanitize it and put it into an object
+    const rawSearchPayload = Object.fromEntries(
+      Array.from(new FormData(event.target).entries()).map(([key, value]) => [
+        key,
+        DomPurify.sanitize(value.toString().trim()),
+      ]),
+    )
+    const searchPayload = {
+      ...rawSearchPayload,
+      mediaId: selectedMediaPreview ? selectedMediaPreview.id : null,
+    } as unknown as ActivitySearchVariables
     setVariables(searchPayload)
   }
 
@@ -42,6 +51,9 @@ function ActivitySearch() {
               placeholder="Title of anime or manga"
               required
               className="aniInput"
+              onPreviewClicked={(media: MediaPreview) => {
+                setSelectedMediaPreview(media);
+              }}
             />
           </FormGroup>
         </div>
@@ -51,8 +63,8 @@ function ActivitySearch() {
           <div className="aniRadioButtons">
             <Form.Check
               type="radio"
-              label={<label htmlFor="animeType">Anime</label>}
               name="type"
+              label={<label htmlFor="animeType">Anime</label>}
               value={MediaType.ANIME}
               defaultChecked
               id="animeType"

@@ -8,12 +8,14 @@ export enum MediaType {
 export interface ActivitySearchVariables {
     username: string,
     title: string,
-    type: MediaType
+    type: MediaType,
+    mediaId: number | null
 }
 
 export interface ActivityCardData {
     activities: {
-        animeTitle: string;
+        mediaTitle: string;
+        mediaCoverImage: string;
         Page: {
             activities: ActivityCardEntries[];
         };
@@ -94,11 +96,13 @@ export interface MediaEntry {
     repeat: number;
 }
 
+export type ActivityMergeOption = 'default' | 'always' | 'never';
+
 export interface ActivityCreatorSearchVariables {
     title: string,
     status: MediaStatus,
-    progress: number | string
-    noMerge: boolean
+    progress: number | string,
+    mergeOption: ActivityMergeOption,
     type: MediaType
 }
 

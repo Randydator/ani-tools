@@ -1,0 +1,6 @@
+[install]
+# Only install package versions published at least 3 days ago (3 days = 259200 seconds)
+minimumReleaseAge = 259200
+ignoreScripts = true
+optionalLifecycleScripts = ["wrangler"]
+exact = true
