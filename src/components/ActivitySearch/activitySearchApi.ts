@@ -5,6 +5,19 @@ import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivitySearchVariables } from "../../utils/anilistInterfaces";
 
+function validateActivitySearchVariables(variables: ActivitySearchVariables | null | undefined): boolean {
+    if (!variables) return false
+
+    // require a media type and at least one non-empty search field
+    if (!variables.type) return false
+
+    const hasUsername = Boolean(variables.username && variables.username.toString().trim() !== "")
+    const hasTitleOrMediaId = Boolean(variables.title && variables.title.toString().trim() !== "") || variables.mediaId !== null
+
+    return hasUsername || hasTitleOrMediaId
+}
+
+
 export const useActivitySearch = (variables: ActivitySearchVariables) => {
     const user = useContext(UserContext)
     const loggedInUserId = user?.id
@@ -16,9 +29,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
             // try catch each request for proper error handling
             let userId
             try {
-                if ('username' in variables && variables.username.trim() !== "") {
-                    userId = await queryAnilist(querySearchUsername, variables)
-                }
+                userId = await queryAnilist(querySearchUsername, variables)
             } catch {
                 throw new Error("User cannot be found");
             }
@@ -52,7 +63,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
             }
         },
         retry: false,
-        enabled: Object.keys(variables).length > 0,
+        enabled: validateActivitySearchVariables(variables),
         staleTime: Infinity
     })
 };

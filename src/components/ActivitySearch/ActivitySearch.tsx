@@ -12,7 +12,7 @@ import UserNameInput from "../../shared/userNameInput/usernameInput"
 
 function ActivitySearch() {
   const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
-  const [variables, setVariables] = useState<ActivitySearchVariables>({ username: "", title: "", type: mediaType, mediaId: "" })
+  const [variables, setVariables] = useState<ActivitySearchVariables>({ username: "", title: "", type: mediaType, mediaId: null })
   const { isLoading, error, data } = useActivitySearch(variables)
   const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
 
@@ -31,7 +31,7 @@ function ActivitySearch() {
     )
     const searchPayload = {
       ...rawSearchPayload,
-      mediaId: selectedMediaPreview ? String(selectedMediaPreview.id) : "",
+      mediaId: selectedMediaPreview ? selectedMediaPreview.id : null,
     } as unknown as ActivitySearchVariables
     setVariables(searchPayload)
   }
