@@ -157,7 +157,7 @@ function ActivityCreator() {
             placeholder="Title of anime or manga"
             required
             className={`aniInput ${titleErrorMsg ? 'is-invalid' : ''}`}
-            onPreviewClicked={(media: MediaPreview) => {
+            onPreviewClicked={(media) => {
               if (media) {
                 setSelectedMediaPreview(media);
               } else {
