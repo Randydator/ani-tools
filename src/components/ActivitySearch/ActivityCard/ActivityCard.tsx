@@ -31,7 +31,7 @@ function ActivityCard(activities: ActivityCardData) {
                 >
                     <Card.Body>
                         <Card.Title>
-                            <p>{progress ? status + ' ' + progress : status}</p>
+                            <p style={{ textTransform: 'capitalize' }}>{progress ? status + ' ' + progress : status}</p>
                         </Card.Title>
                     </Card.Body>
                     <Card.Footer className='c-footer'>

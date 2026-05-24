@@ -5,16 +5,16 @@ import { UserContext } from "../Header/UserContext";
 import { useContext } from "react";
 import { ActivitySearchVariables } from "../../utils/anilistInterfaces";
 
-function validateActivitySearchVariables(variables: ActivitySearchVariables | null | undefined): boolean {
+function validateActivitySearchVariables(variables: ActivitySearchVariables | null | undefined, loggedInUserId: number | undefined): boolean {
     if (!variables) return false
 
     // require a media type and at least one non-empty search field
     if (!variables.type) return false
 
-    const hasUsername = Boolean(variables.username && variables.username.toString().trim() !== "")
+    const hasUsername = Boolean(variables.username.trim() !== "") || loggedInUserId !== undefined
     const hasTitleOrMediaId = Boolean(variables.title && variables.title.toString().trim() !== "") || variables.mediaId !== null
 
-    return hasUsername || hasTitleOrMediaId
+    return hasUsername && hasTitleOrMediaId
 }
 
 
@@ -28,10 +28,14 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
 
             // try catch each request for proper error handling
             let userId
-            try {
-                userId = await queryAnilist(querySearchUsername, variables)
-            } catch {
-                throw new Error("User cannot be found");
+            if (variables.username.trim() !== "") {
+                try {
+                    userId = await queryAnilist(querySearchUsername, variables)
+                } catch {
+                    throw new Error("User cannot be found");
+                }
+            } else {
+                userId = loggedInUserId
             }
 
             let media
@@ -46,7 +50,6 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
                 throw new Error("Media cannot be found");
             }
 
-
             const updatedVariables = { ...variables, userId: userId?.User?.id || loggedInUserId, mediaId: media.Media.id }
             let activityData
             try {
@@ -55,7 +58,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
                 throw new Error("Activities cannot be found");
             }
 
-            // add media title to give user feedback what media anilist fuzzy search found
+            variables.mediaId = null // reset mediaId to not use previous search's mediaId for next search if user changes title
             return {
                 ...activityData,
                 mediaTitle: media.Media.title.english ? media.Media.title.english : media.Media.title.romaji,
@@ -63,7 +66,7 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
             }
         },
         retry: false,
-        enabled: validateActivitySearchVariables(variables),
+        enabled: validateActivitySearchVariables(variables, loggedInUserId),
         staleTime: Infinity
     })
 };
