@@ -28,24 +28,21 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
 
             // try catch each request for proper error handling
             let userId
-            if (variables.username.trim() !== "") {
-                try {
-                    userId = await queryAnilist(querySearchUsername, variables)
-                } catch {
-                    throw new Error("User cannot be found");
-                }
-            } else {
-                userId = loggedInUserId
+            try {
+                userId = variables.username.trim() !== ""
+                    ? await queryAnilist(querySearchUsername, variables)
+                    : userId = loggedInUserId
+            }
+            catch {
+                throw new Error("User cannot be found");
             }
 
             let media
             // media provided if clicked on an entry in PreviewSearch, otherwise try to find media via title search
             try {
-                if (variables.mediaId) {
-                    media = await queryAnilist(querySearchMediaById, variables)
-                } else {
-                    media = await queryAnilist(querySearchMediaByTitle, variables)
-                }
+                media = variables.mediaId
+                    ? await queryAnilist(querySearchMediaById, variables)
+                    : await queryAnilist(querySearchMediaByTitle, variables)
             } catch {
                 throw new Error("Media cannot be found");
             }

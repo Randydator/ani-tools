@@ -12,7 +12,7 @@ function ActivityCreator() {
   const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
   const [mergeOption, setMergeOption] = useState<'default' | 'always' | 'never'>('default');
 
-  const invalidNumberChars = ['e', 'E', '.', '+', '-', ','];
+  const invalidNumberChars = 'eE.+-,';
 
   const {
     mutate,

@@ -9,7 +9,7 @@ export interface ActivitySearchVariables {
     username: string,
     title: string,
     type: MediaType,
-    mediaId?: number | null
+    mediaId: number | null
 }
 
 export interface ActivityCardData {
