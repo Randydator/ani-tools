@@ -10,7 +10,7 @@ import { FaTimes } from 'react-icons/fa';
 
 type PreviewSearchProps = {
     mediaType: MediaType,
-    onPreviewClicked?: (item: any) => void
+    onPreviewClicked?: (item: MediaPreview | null) => void
 }
 
 function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: PreviewSearchProps & React.ComponentProps<typeof FormControl>) {
@@ -89,6 +89,9 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
                     debouncedOnChange();
                     setSearchTerm(e.target.value);
                     setShowPopup(true);  // Show popup when typing new text
+                    if (onPreviewClicked) {
+                        onPreviewClicked(null as any);
+                    }
                 }}
                 onClick={() => setShowPopup(true)} // For when you type, press enter before preview and then click on it again
                 onFocus={() => setShowPopup(true)}

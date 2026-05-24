@@ -51,7 +51,7 @@ function ActivitySearch() {
               placeholder="Title of anime or manga"
               required
               className="aniInput"
-              onPreviewClicked={(media: MediaPreview) => {
+              onPreviewClicked={(media) => {
                 setSelectedMediaPreview(media);
               }}
             />

@@ -55,7 +55,6 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
                 throw new Error("Activities cannot be found");
             }
 
-            variables.mediaId = null // reset mediaId to not use previous search's mediaId for next search if user changes title
             return {
                 ...activityData,
                 mediaTitle: media.Media.title.english ? media.Media.title.english : media.Media.title.romaji,
