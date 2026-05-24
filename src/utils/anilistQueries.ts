@@ -197,6 +197,9 @@ query ($title: String, $type: MediaType)
         english
         romaji
     }
+    coverImage {
+        large
+    }
   }
 
 }
@@ -210,6 +213,9 @@ query ($mediaId: Int, $type: MediaType)
     title{
         english
         romaji
+    }
+    coverImage {
+        large
     }
   }
 

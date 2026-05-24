@@ -1,12 +1,11 @@
 import { ActivityCardData, ActivityCardEntries } from '../../../utils/anilistInterfaces'
 import './activityCard.css'
-
 import { Card } from 'react-bootstrap'
 
 // TODO: Use userPreferred for title here as well
 
 function ActivityCard(activities: ActivityCardData) {
-    const animeTitle = activities.activities.animeTitle
+    const mediaTitle = activities.activities.mediaTitle
     const activityList: ActivityCardEntries[] = activities.activities.Page.activities
 
     if (activityList.length === 0) {
@@ -14,7 +13,8 @@ function ActivityCard(activities: ActivityCardData) {
             <Card className='activityCard'>
                 <Card.Body>
                     <Card.Title>
-                        <p>No activities found for media: {animeTitle}</p>
+                        <p>No activities found for media: {mediaTitle}</p>
+                        <img src={activities.activities.mediaCoverImage} alt={mediaTitle} className='mediaCoverImage'/>
                     </Card.Title>
                 </Card.Body>
             </Card>

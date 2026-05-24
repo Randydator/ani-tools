@@ -51,3 +51,9 @@
         transition: transform 0.1s ease-in-out;
     }
 }
+
+.mediaCoverImage {
+    width: 50%;
+    height: auto;
+    margin-top: 1rem;
+}

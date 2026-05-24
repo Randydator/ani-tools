@@ -14,7 +14,8 @@ export interface ActivitySearchVariables {
 
 export interface ActivityCardData {
     activities: {
-        animeTitle: string;
+        mediaTitle: string;
+        mediaCoverImage: string;
         Page: {
             activities: ActivityCardEntries[];
         };

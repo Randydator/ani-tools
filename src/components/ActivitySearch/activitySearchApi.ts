@@ -44,10 +44,11 @@ export const useActivitySearch = (variables: ActivitySearchVariables) => {
                 throw new Error("Activities cannot be found");
             }
 
-            // add anime title to give user feedback what media anilist fuzy search found
+            // add media title to give user feedback what media anilist fuzzy search found
             return {
                 ...activityData,
-                animeTitle: media.Media.title.english ? media.Media.title.english : media.Media.title.romaji
+                mediaTitle: media.Media.title.english ? media.Media.title.english : media.Media.title.romaji,
+                mediaCoverImage: media.Media.coverImage.large
             }
         },
         retry: false,

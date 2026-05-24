@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Form, FormGroup, Button} from "react-bootstrap"
+import { Form, FormGroup, Button } from "react-bootstrap"
 import DomPurify from "dompurify"
 import { Card } from "react-bootstrap"
 
@@ -13,7 +13,7 @@ import UserNameInput from "../../shared/userNameInput/usernameInput"
 function ActivitySearch() {
   const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
   const [variables, setVariables] = useState<ActivitySearchVariables>({ username: "", title: "", type: mediaType, mediaId: "" })
-  const {isLoading, error, data} = useActivitySearch(variables)
+  const { isLoading, error, data } = useActivitySearch(variables)
   const [selectedMediaPreview, setSelectedMediaPreview] = useState<MediaPreview | null>(null);
 
   function handleMediaTypeChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -63,8 +63,8 @@ function ActivitySearch() {
           <div className="aniRadioButtons">
             <Form.Check
               type="radio"
-              label={<label htmlFor="animeType">Anime</label>}
               name="type"
+              label={<label htmlFor="animeType">Anime</label>}
               value={MediaType.ANIME}
               defaultChecked
               id="animeType"
