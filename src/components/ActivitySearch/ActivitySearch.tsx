@@ -9,6 +9,7 @@ import ActivityCard from "./ActivityCard/ActivityCard"
 import PreviewSearch from "../../shared/previewSearch/previewSearch"
 import { MediaPreview, MediaType, ActivitySearchVariables } from "../../utils/anilistInterfaces"
 import UserNameInput from "../../shared/userNameInput/usernameInput"
+import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner"
 
 function ActivitySearch() {
   const [mediaType, setMediaType] = useState<MediaType>(MediaType.ANIME)
@@ -89,7 +90,7 @@ function ActivitySearch() {
           <Card className='activityCard'>
             <Card.Body>
               <Card.Title>
-                <p>Loading...</p>
+                <LoadingSpinner />
               </Card.Title>
             </Card.Body>
           </Card>

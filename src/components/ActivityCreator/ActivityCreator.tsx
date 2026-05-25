@@ -5,6 +5,7 @@ import { MediaStatus, MediaType, MediaPreview, ActivityCreatorSearchVariables } 
 import './activityCreator.css'
 import DomPurify from "dompurify"
 import { useActivityCreator } from './activityCreatorApi';
+import LoadingSpinner from '../../shared/LoadingSpinner/LoadingSpinner';
 
 function ActivityCreator() {
   const [progress, setProgress] = useState<number | string>('');
@@ -250,7 +251,7 @@ function ActivityCreator() {
           <Card className='activityCard'>
             <Card.Body>
               <Card.Title>
-                <p>Loading...</p>
+                <LoadingSpinner />
               </Card.Title>
             </Card.Body>
           </Card>

@@ -7,6 +7,7 @@ import DomPurify from "dompurify"
 import useDebounce from './useDebounce';
 import { handleKeyboardEvent } from './previewSearchKeyboardHandler';
 import { FaTimes } from 'react-icons/fa';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PreviewSearchProps = {
     mediaType: MediaType,
@@ -120,7 +121,7 @@ function PreviewSearch({ mediaType: mediaType, onPreviewClicked, ...props }: Pre
                 <ListGroup className="listGroup">
                     {isLoading && (
                         <ListGroupItem className="listGroupItem">
-                            <p>Loading...</p>
+                            <LoadingSpinner className="mx-auto"/>
                         </ListGroupItem>
                     )}
                     {error && (

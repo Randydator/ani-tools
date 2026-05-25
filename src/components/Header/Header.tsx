@@ -1,5 +1,5 @@
 import './header.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { Container, Button, Image, Dropdown } from 'react-bootstrap';
 import { FaUser, FaGithub } from 'react-icons/fa';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { UserContext, User } from './UserContext';
 
 import { queryAnilist } from '../../utils/anilistApiClient';
 import { getUsernameById } from '../../utils/anilistQueries';
+import LoadingSpinner from '../../shared/LoadingSpinner/LoadingSpinner';
 
 function Header() {
     const emptyUser: User = {
@@ -144,9 +145,13 @@ function Header() {
         </Container>
 
         <main>
-            <UserContext.Provider value={user} >
-                <Outlet />
-            </ UserContext.Provider>
+            <Suspense fallback={
+                <LoadingSpinner fullPage={true} />
+            }>
+                <UserContext.Provider value={user} >
+                    <Outlet />
+                </ UserContext.Provider>
+            </Suspense>
         </main>
 
         <a href="https://github.com/Randydator/ani-tools" target="_blank" rel="noopener noreferrer" className="github-fab" aria-label="ani-tools on GitHub" title="View project on GitHub">

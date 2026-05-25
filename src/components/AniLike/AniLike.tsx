@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchLikeActivities, fetchReplyActivities } from "./anilikeApi"
 import LikeNotificationCard from "./NotificationCard/LikeNotificationCard";
 import ReplyNotificationCard from "./NotificationCard/ReplyNotificationCard";
+import  LoadingSpinner  from "../../shared/LoadingSpinner/LoadingSpinner";
 import { Col, Row } from "react-bootstrap";
 import './anilike.css'
 
@@ -24,7 +25,7 @@ function AniLike() {
   }
 
   if (isLoading || data === undefined) {
-    return <h1>Loading...</h1>
+    return <LoadingSpinner fullPage={true} />
   }
 
   return (
