@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { debounce } from "lodash";
+import { debounce } from "lodash-es";
 
 // https://www.developerway.com/posts/debouncing-in-react 
 const debounceTime: number = 1000
