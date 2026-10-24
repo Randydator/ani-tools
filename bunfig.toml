@@ -3,4 +3,4 @@
 minimumReleaseAge = 259200
 ignoreScripts = true
 optionalLifecycleScripts = ["wrangler"]
-exact = true
+exact = false
