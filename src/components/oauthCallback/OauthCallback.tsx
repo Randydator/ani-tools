@@ -19,7 +19,7 @@ function OauthCallback() {
             const sanitizedAccessToken = DOMPurify.sanitize(accessToken);
 
             // Save the access token as a cookie
-            Cookies.set('access_token', sanitizedAccessToken, { secure: true, sameSite: 'strict', expires: 7 });
+            Cookies.set('access_token', sanitizedAccessToken, { secure: true, sameSite: 'strict', expires: 7});
 
             hasNavigated.current = true;
             navigate('/');

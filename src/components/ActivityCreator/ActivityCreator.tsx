@@ -56,6 +56,8 @@ function ActivityCreator() {
       return;
     }
 
+
+    // TODO: Bug: The "Set status to completed for final episode" message below overrides Planning activity error message. ALso you cant seem to create planning activities :v
     if (status === MediaStatus.PLANNING && progressValue) {
       setProgressErrorMsg("Cannot set progress when planning an anime");
       hasError = true;

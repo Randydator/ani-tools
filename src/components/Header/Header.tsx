@@ -26,7 +26,7 @@ function Header() {
     const [showDropdown, setShowDropdown] = useState(false);
     const hideTimeoutRef = useRef<number | null>(null);
 
-    // Setting a cookie is asynchronous, so after the redirect, the cookie isn't set yet. 
+    // Setting a cookie is asynchronous, so after the redirect, the cookie isn't set yet.
     // useEffect here runs once after the component is mounted. By that time the cookie is set.
     useEffect(() => {
         const fetchData = async () => {

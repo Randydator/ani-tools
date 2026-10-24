@@ -7,8 +7,8 @@ import { UserContext } from '../Header/UserContext';
 function Home() {
     const user = useContext(UserContext)
 
-    return (
-        <div className="homeBody">
+  return (
+    <div className="homeBody">
             <Link to="/AniLike" className="p-0 border-0 text-decoration-none" style={{pointerEvents: user?.token === undefined ? 'none' : 'auto', opacity: user?.token === undefined ? 0.5 : 1}}>
                 <Card className='home-card'>
                     <Card.Body>
