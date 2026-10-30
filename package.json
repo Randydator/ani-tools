@@ -11,7 +11,7 @@
     "deploy": "bun build && wrangler pages deploy ./dist"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.104.5",
+    "@tanstack/react-query": "^5.105.0",
     "@tanstack/react-query-devtools": "^5.104.5",
     "@vitejs/plugin-react": "^6.1.2",
     "axios": "^1.20.0",
