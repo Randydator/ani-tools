@@ -20,7 +20,7 @@
         "react-router-dom": "^7.18.4",
       },
       "devDependencies": {
-        "@cloudflare/workers-types": "^5.20261023.1",
+        "@cloudflare/workers-types": "^5.20261114.1",
         "@eslint/js": "^10.0.1",
         "@types/js-cookie": "^3.0.6",
         "@types/lodash": "^4.17.27",
@@ -90,7 +90,7 @@
 
     "@cloudflare/workerd-windows-64": ["@cloudflare/workerd-windows-64@1.20261019.1", "", { "os": "win32", "cpu": "x64" }, "sha512-z49fvKTETMCnG6wnMcQwxx9CpryFceiKz04FRjq26EkhCyzRNJ6c3UXhyZz3r5f1CXnnBZc5DcU8ZouPkUJCqw=="],
 
-    "@cloudflare/workers-types": ["@cloudflare/workers-types@5.20261023.1", "", {}, "sha512-jRaMsWUF/08dd0dWnX3zPGPOjakkkA2JPnK5vLsCQFmYC40kbMPZ02fvOPO8kqjqgljoMZrKsRiXpR1u1Lp0Qg=="],
+    "@cloudflare/workers-types": ["@cloudflare/workers-types@5.20261114.1", "", {}, "sha512-+oSzWssC5/wfY92Ij/O4XUnxcKh6mPrE6EsWDoHrLYYTjLHEsDU520mllwCu4O63WXdZWFUteeUB55BOk7hpZw=="],
 
     "@corvu/utils": ["@corvu/utils@0.4.2", "", { "dependencies": { "@floating-ui/dom": "^1.6.11" }, "peerDependencies": { "solid-js": "^1.8" } }, "sha512-Ox2kYyxy7NoXdKWdHeDEjZxClwzO4SKM8plAaVwmAJPxHMqA0rLOoAsa+hBDwRLpctf+ZRnAd/ykguuJidnaTA=="],
 
